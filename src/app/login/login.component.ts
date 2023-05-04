@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CognitoService } from '../services/cognito.service';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { IUser } from '../model/User';
 import { FormControl, FormGroup } from '@angular/forms';
 
@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit{
     const user: IUser = this.userForm.value;
     this.cognitoService.verify(user).then(()=>{
       this.isCreated = false;
+      window.location.reload();
     }).catch((error) =>{
         alert(error)
     } )

@@ -21,6 +21,7 @@ export class CognitoService {
       password:user.password
     })
    }
+   
   verify(user: IUser):Promise<any> {
     return Auth.confirmSignUp(user.username,user.code);
   }
