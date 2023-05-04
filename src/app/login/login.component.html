@@ -11,10 +11,10 @@
 		</form>
 	</div>
 	<div class="form-container sign-in-container">
-		<form action="#">
+		<form action="#" [formGroup]="userForm">
 			<h1>Sign in</h1>
-			<input type="email" placeholder="Email" />
-			<input type="password" placeholder="Password" />
+			<input type="email" placeholder="Email" formControlName="username"/>
+			<input type="password" placeholder="Password" formControlName="password"/>
 			<button (click)="signIn()">Sign In</button>
 		</form>
 	</div>

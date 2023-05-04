@@ -3,6 +3,7 @@ import { CognitoService } from '../services/cognito.service';
 import { Router } from '@angular/router';
 import { IUser } from '../model/User';
 import { FormControl, FormGroup } from '@angular/forms';
+import {Auth} from "aws-amplify";
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,7 @@ export class LoginComponent implements OnInit{
     signUpButton.addEventListener('click', () => {
       container.classList.add("right-panel-active");
     });
-    
+
     signInButton.addEventListener('click', () => {
       container.classList.remove("right-panel-active");
     });
@@ -55,7 +56,15 @@ export class LoginComponent implements OnInit{
 
   }
 
-  signIn() {
+  signIn() : void {
+    const user: IUser = this.userForm.value;
+    this.cognitoService.signIn(user).then(()=>{
+      alert("Successful login!")
+      this.router.navigate(['/profile']);
+    }).catch((error)=>{
+      alert(error);
+    })
+
   }
 
 }

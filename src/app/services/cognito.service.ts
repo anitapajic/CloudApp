@@ -7,7 +7,7 @@ import { Amplify, Auth } from 'aws-amplify';
   providedIn: 'root'
 })
 export class CognitoService {
- 
+
 
   constructor() {
     Amplify.configure({
@@ -21,9 +21,17 @@ export class CognitoService {
       password:user.password
     })
    }
-   
+
   verify(user: IUser):Promise<any> {
     return Auth.confirmSignUp(user.username,user.code);
+  }
+
+  signIn(user:IUser):Promise<any> {
+    return Auth.signIn(user.username, user.password);
+  }
+
+  getUser():Promise<any>{
+    return Auth.currentUserInfo();
   }
 
 }
