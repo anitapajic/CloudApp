@@ -1,13 +1,13 @@
 <div class="container" id="container">
 	<div class="form-container sign-up-container">
-		<form action="#">
+		<form action="#" [formGroup]="userForm" >
 			<h1>Create Account</h1>
-			<input type="text" placeholder="Name" />
-            <input type="text" placeholder="Lastname" />
-			<input type="email" placeholder="Email" />
-            <input type="text" placeholder="Telephone" />
-			<input type="password" placeholder="Password" />
-			<button>Sign Up</button>
+			<input placeholder="Email"  formControlName="username"/>
+			<input type="password" placeholder="Password" *ngIf="!isCreated" formControlName="password"/>
+			<input placeholder="Code" *ngIf="isCreated" formControlName="code"/>
+
+			<button *ngIf="!isCreated" (click)="signUp()">Sign Up</button>
+			<button *ngIf="isCreated" (click)="verify()">Verify</button>
 		</form>
 	</div>
 	<div class="form-container sign-in-container">
@@ -15,9 +15,7 @@
 			<h1>Sign in</h1>
 			<input type="email" placeholder="Email" />
 			<input type="password" placeholder="Password" />
-            <input type="password" placeholder="Confirm password" />
-			<a href="#">Forgot your password?</a>
-			<button>Sign In</button>
+			<button (click)="signIn()">Sign In</button>
 		</form>
 	</div>
 	<div class="overlay-container">
