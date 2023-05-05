@@ -30,7 +30,7 @@ export class CognitoService {
     return Auth.signIn(user.username, user.password);
   }
 
-  getUser():Promise<any>{
+  async getUser():Promise<any>{
     return Auth.currentUserInfo();
   }
 
