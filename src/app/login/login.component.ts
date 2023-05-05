@@ -59,7 +59,6 @@ export class LoginComponent implements OnInit{
   signIn() : void {
     const user: IUser = this.userForm.value;
     this.cognitoService.signIn(user).then(()=>{
-      alert("Successful login!")
       this.router.navigate(['/upload']);
     }).catch((error)=>{
       alert(error);
