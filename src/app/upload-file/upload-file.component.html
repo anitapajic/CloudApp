@@ -1,24 +1,29 @@
 <div id="header">
-  <h2>File Upload & Image Preview</h2>
+  <h2>File Upload</h2>
 </div>
 <!-- Upload  -->
-<form id="file-upload-form" class="uploader">
 
-  <input id="file-upload" type="file" name="fileUpload" accept="image/*" />
+<div style="height: 250px;">
+  <form id="file-upload-form" class="uploader" enctype="multipart/form-data">
+    <!-- Add the enctype attribute with value "multipart/form-data" to enable file upload -->
+  
+    <input id="file-upload" type="file" name="fileUpload" accept="*" (change)="onFileSelected($event)"/>
+    
+    
+    <label for="file-upload" id="file-drag">
+      <div id="start">
+        <i class="fa fa-download" aria-hidden="true"></i>
+        <div>Select a file or drag here</div>
+        <div id="notimage" class="hidden">Please select an image</div>
+      </div>
+    </label>
 
-  <label for="file-upload" id="file-drag">
-    <img id="file-image" src="#" alt="Preview" class="hidden">
-    <div id="start">
-      <i class="fa fa-download" aria-hidden="true"></i>
-      <div>Select a file or drag here</div>
-      <div id="notimage" class="hidden">Please select an image</div>
-      <span id="file-upload-btn" class="btn btn-primary">Select a file</span>
-    </div>
-    <div id="response" class="hidden">
-      <div id="messages"></div>
-      <progress class="progress" id="file-progress" value="0">
-        <span>0</span>%
-      </progress>
-    </div>
-  </label>
-</form>
+    <button id="file-upload-btn" class="btn btn-primary" type="submit" (click)="uploadFile(file)">Upload</button>
+
+  </form>
+
+</div>
+<div style="display: block; width: 100%;">
+  <p *ngIf="file!=null">{{file.name}}</p>
+</div>
+

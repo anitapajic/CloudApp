@@ -167,7 +167,7 @@ div {
 }
 .btn {
   display: inline-block;
-  margin: .5rem .5rem 1rem .5rem;
+  margin: 5px 45%;
   clear: both;
   font-family: inherit;
   font-weight: 700;
