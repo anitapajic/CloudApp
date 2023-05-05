@@ -10,7 +10,7 @@
     <input id="file-upload" type="file" name="fileUpload" accept="*" (change)="onFileSelected($event)"/>
     
     
-    <label for="file-upload" id="file-drag">
+    <label for="file-upload" id="file-drag"  (dragover)="handleDragOver($event)" (dragleave)="handleDragLeave($event)" (drop)="handleFileSelect($event)">
       <div id="start">
         <i class="fa fa-download" aria-hidden="true"></i>
         <div>Select a file or drag here</div>
