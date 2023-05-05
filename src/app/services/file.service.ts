@@ -13,15 +13,37 @@ export class FileService {
 
   async uploadFile(file : IFile){
 
+
     await this.cognito.getUser().then((value: any) => {
       file.username = value.attributes.email;
     })
+    var typeFolder = this.findFolder(file.type.split('/')[0]);
 
-    var fileDir = '/' + file.username + '/' + file.type.split('/')[0] + '/' + file.name
-    console.log(fileDir)
-    console.log(file)
+    var fileDir = '/' + file.username + '/' + typeFolder + '/' + file.name
+    // Upisi prvo ovde
+    if(file.favourite){
+      fileDir = '/' + file.username + '/favourites/' + file.name
+      // ako je fav upisi i ovde
+
+    }
+
+    //kad sve zavrsi upisi metadata
+    this.uploadFileData(file);
 
   }
+
+  findFolder(type: string) {
+    if(type=='image')
+      return 'photos';
+    else if(type == 'video')
+      return 'videos'
+    else if(type == 'application')
+      return 'documents'
+    else
+      return 'other'  
+  }
+
+  
 
   uploadFileData(file: IFile){
 
