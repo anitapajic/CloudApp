@@ -1,0 +1,100 @@
+
+<body>
+    <div id="menu">
+      <!-- Menu Content Goes Here -->
+      <img class="logo" src="..\..\assets\logo.png" alt="">
+      <div id="buttons">
+
+
+      <button class="menu-button" >
+        <span class="button-icon">
+          <i class="fas fa-chart-line ic" ></i>
+        </span>
+        <span class="button-text">Dashboard</span>
+      </button>
+      <button class="menu-button" >
+        <span class="button-icon">
+          <i class="fas  fa-folder ic"></i>
+        </span>
+        <span class="button-text">My Folder</span>
+      </button>
+      <button class="menu-button" >
+        <span class="button-icon">
+          <i class="fas fa-heart ic"></i>
+        </span>
+        <span class="button-text">Favorite</span>
+      </button>
+    </div>
+
+
+    
+    </div>
+    
+    <div id="main">
+        <div class="mainm">
+            <div id="title">My Cloud</div>
+            <div id="separator"></div>
+            <!-- Main Section Content Goes Here -->
+            <div class="context">
+                <div  class="left-column">
+                <div class="albums">
+                    <div class="mainTitle">Albums</div>
+                    <div class="card card-with-shadow">
+                        <div class="card-icon">
+                          <i class="fas fa-image"></i>
+                        </div>
+                        <div class="card-content">
+                          <h3 class="card-title">Album Name</h3>
+                        </div>
+                      </div>
+                      
+                </div>
+                
+                <div class="table">
+                    <div class="mainTitle">Folders</div>
+                    <table id="file-system">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Size</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr onclick="handleClick('folder1')">
+                            <td><i class="fas fa-folder"></i> Folder 1</td>
+                            <td>Folder</td>
+                            <td>-</td>
+                          </tr>
+                          <tr onclick="handleClick('folder2')">
+                            <td><i class="fas fa-folder"></i> Folder 2</td>
+                            <td>Folder</td>
+                            <td>-</td>
+                          </tr>
+                          <tr onclick="handleClick('file1')">
+                            <td><i class="fas fa-file"></i> File 1</td>
+                            <td>File</td>
+                            <td>10 KB</td>
+                          </tr>
+                          <tr onclick="handleClick('file2')">
+                            <td><i class="fas fa-file"></i> File 2</td>
+                            <td>File</td>
+                            <td>5 KB</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      
+                </div>
+                </div>
+                <div class="right-column">
+                <div class="upload">
+                    <div class="upload-title">Upload</div>
+                    <div class="upload-content">
+                        <app-upload-file></app-upload-file>
+                      </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>

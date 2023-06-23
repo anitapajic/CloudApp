@@ -1,22 +1,23 @@
-<div id="header">
-  <h2>File Upload</h2>
-</div>
+
 <!-- Upload  -->
 
 <div >
   <form id="file-upload-form" class="uploader" enctype="multipart/form-data">
     <!-- Add the enctype attribute with value "multipart/form-data" to enable file upload -->
+    <div>
+      <input id="file-upload" type="file" name="fileUpload" accept="*" (change)="onFileSelected($event)"/>
+    
+      <label for="file-upload" id="file-drag"  (dragover)="handleDragOver($event)" (dragleave)="handleDragLeave($event)" (drop)="handleFileSelect($event)">
+        <div id="start">
+          <i class="fa fa-download" aria-hidden="true"></i>
+          <div>Select a file or drag here</div>
+        </div>
+      </label>
+    </div>  
+  </form>
   
-    <input id="file-upload" type="file" name="fileUpload" accept="*" (change)="onFileSelected($event)"/>
-    
-    
-    <label for="file-upload" id="file-drag"  (dragover)="handleDragOver($event)" (dragleave)="handleDragLeave($event)" (drop)="handleFileSelect($event)">
-      <div id="start">
-        <i class="fa fa-download" aria-hidden="true"></i>
-        <div>Select a file or drag here</div>
-      </div>
-    </label>
-    <form *ngIf="file != null">
+  <div >
+    <form *ngIf="file != null" class="formDiv">
       <p>Name : <input id="name" name="name" [(ngModel)]="myFile.name" placeholder="{{myFile.name}}"></p>
       <p>Description : <input  name="description" [(ngModel)]="myFile.description" id="description"></p>
       <p>Tags : <input name="tags" [(ngModel)]="myFile.tags" id="tags"></p>
@@ -24,13 +25,12 @@
       <p>Size : {{myFile.size.toFixed(2)}}MB</p>
       <p>Date uploaded : {{myFile.date.toLocaleDateString()}}</p>
       <p>Type : {{myFile.type}}</p>
-    </form>
-
-
+    </form>      
+  </div>
+  <div class="btnd">
     <button id="file-upload-btn" class="btn btn-primary" type="submit" (click)="uploadFile()">Upload</button>
 
-  </form>
-
+  </div>
 </div>
 
 

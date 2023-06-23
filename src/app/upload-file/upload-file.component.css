@@ -45,9 +45,9 @@ p {
   margin: 0 auto;
   width: 100%;
   max-width: 600px;
+  margin-bottom: 30px;
 }
-
-.uploader label {
+.uploader[_ngcontent-erc-c4] label[_ngcontent-erc-c4] {
   float: left;
   clear: both;
   width: 100%;
@@ -57,16 +57,34 @@ p {
   border-radius: 7px;
   border: 3px solid #eee;
   transition: all .2s ease;
+  -webkit-user-select: none;
+  user-select: none;
+  margin-bottom: 30px;
+}
+.fa-download:before {
+  content: "\f019";
+  color: #c1e166;
+}
+.uploader label {
+  float: left;
+  clear: both;
+  width: 100%;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  background: #fff;
+  border-radius: 7px;
+  border: 3px dashed #eee;
+  transition: all .2s ease;
   user-select: none;
 }
 
 
 .uploader label:hover {
-  border-color: #454cad;
+  border-color: #c1e166;
 }
 
 .uploader label.hover {
-  border: 3px solid #454cad;
+  border: 3px dashed #c1e166;
   box-shadow: inset 0 0 0 6px #eee;
 }
 
@@ -103,6 +121,9 @@ p {
 
 .uploader #response #messages {
   margin-bottom: .5rem;
+}
+.file-upload{
+  padding-bottom: 30px;
 }
 
 .uploader #file-image {
@@ -149,11 +170,11 @@ p {
 
 
 .progress[value]::-webkit-progress-value {
-  background: linear-gradient(to right, rgba(69, 76, 173, 0.92) 0%, #454cad 50%);
+  background: linear-gradient(to right, rgba(69, 76, 173, 0.92) 0%, #c1e166 50%);
   border-radius: 4px;
 }
 .progress[value]::-moz-progress-bar {
-  background: linear-gradient(to right, rgba(69, 76, 173, 0.92) 0%, #454cad 50%);
+  background: linear-gradient(to right, rgba(69, 76, 173, 0.92) 0%, #c1e166 50%);
   border-radius: 4px;
 }
 
@@ -167,7 +188,6 @@ div {
 }
 .btn {
   display: inline-block;
-  margin: 5px 45%;
   clear: both;
   font-family: inherit;
   font-weight: 700;
@@ -178,13 +198,28 @@ div {
   border-radius: .2rem;
   outline: none;
   padding: 0 1rem;
-  height: 36px;
+  height: 36px;  
+  margin-left: 36%;
+  margin-top: 20px;
   line-height: 36px;
   color: #fff;
   transition: all 0.2s ease-in-out;
   box-sizing: border-box;
-  background: #454cad;
-  border-color: #454cad;
+  background: #0f555b;
+  border-color: #0f555b;
   cursor: pointer;
+}
+.btnd{
+  align-items: center;
+}
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.formDiv{
+  margin-top: 20px!important;
 }
 

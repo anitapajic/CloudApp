@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit{
   signIn() : void {
     const user: IUser = this.userForm.value;
     this.cognitoService.signIn(user).then(()=>{
-      this.router.navigate(['/upload']);
+      this.router.navigate(['/home']);
     }).catch((error)=>{
       alert(error);
     })

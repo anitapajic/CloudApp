@@ -9,6 +9,7 @@ import { ProfileComponent } from './profile/profile.component';
 import {AppRoutingModule} from "./app-routing.module";
 import { UploadFileComponent } from './upload-file/upload-file.component';
 import {HttpClient, HttpClientModule} from "@angular/common/http";
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
     LoginComponent,
     ProfileComponent,
     UploadFileComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
