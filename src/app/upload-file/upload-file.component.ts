@@ -20,8 +20,6 @@ export class UploadFileComponent implements OnInit{
   constructor(private fileService: FileService) { }
 
   ngOnInit() {
-    this.fileService.getFiles();
-
     console.log('Upload initialised');
     this.fileForm = new FormGroup({
       description: new FormControl(''),
