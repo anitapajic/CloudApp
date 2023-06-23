@@ -24,7 +24,7 @@ export class UploadFileComponent implements OnInit{
     this.fileForm = new FormGroup({
       description: new FormControl(''),
       tags: new FormControl(''),
-      favourite: new FormControl(''),
+      favourite: new FormControl(false),
     });
   }
 
