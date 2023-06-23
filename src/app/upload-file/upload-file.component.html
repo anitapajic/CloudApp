@@ -23,7 +23,7 @@
       <p>Tags : <input name="tags" [(ngModel)]="myFile.tags" id="tags"></p>
       <p>Favourite : <input type="checkbox" name="favourite" [(ngModel)]="myFile.favourite"></p>
       <p>Size : {{myFile.size.toFixed(2)}}MB</p>
-      <p>Date uploaded : {{myFile.date.toLocaleDateString()}}</p>
+      <p>Date uploaded : {{myFile.date_uploaded.toLocaleDateString()}}</p>
       <p>Type : {{myFile.type}}</p>
     </form>      
   </div>

@@ -3,6 +3,8 @@
 		<form action="#" [formGroup]="userForm" >
 			<h1>Create Account</h1>
 			<input placeholder="Email"  formControlName="username"/>
+			<input placeholder="First name"  formControlName="name"/>
+			<input placeholder="Last name"  formControlName="family_name"/>
 			<input type="password" placeholder="Password" *ngIf="!isCreated" formControlName="password"/>
 			<input placeholder="Code" *ngIf="isCreated" formControlName="code"/>
 

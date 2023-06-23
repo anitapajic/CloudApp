@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CognitoService } from '../services/cognito.service';
 import { Router } from '@angular/router';
-import { IUser } from '../model/User';
+import { IUser, newIUser } from '../model/User';
 import { FormControl, FormGroup } from '@angular/forms';
 import {Auth} from "aws-amplify";
 
@@ -31,15 +31,27 @@ export class LoginComponent implements OnInit{
     this.userForm = new FormGroup({
       username: new FormControl(''),
       password: new FormControl(''),
+      name: new FormControl(''),
+      family_name : new FormControl(''),
       code: new FormControl('')
     });
   }
 
   signUp() {
     const user: IUser = this.userForm.value;
-    console.log(user)
     this.cognitoService.signUp(user).then(()=>{
       this.isCreated = true;
+      var newUser : newIUser = {
+        name: user.name,
+        family_name : user.family_name,
+        username : user.username,
+        password : user.password,
+        folders : ['bucket-tim19/'+ user.username]
+    }
+    this.cognitoService.uploadUser(newUser);
+  
+
+
     }).catch((error) =>{
         alert(error)
     } )
@@ -47,8 +59,10 @@ export class LoginComponent implements OnInit{
 
   verify() {
     const user: IUser = this.userForm.value;
+
     this.cognitoService.verify(user).then(()=>{
       this.isCreated = false;
+
       window.location.reload();
     }).catch((error) =>{
         alert(error)
