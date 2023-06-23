@@ -16,13 +16,13 @@
         <div>Select a file or drag here</div>
       </div>
     </label>
-    <form *ngIf="file != null">
-      <p>Name : <input id="name" name="name" [(ngModel)]="myFile.name" placeholder="{{myFile.name}}"></p>
-      <p>Description : <input  name="description" [(ngModel)]="myFile.description" id="description"></p>
-      <p>Tags : <input name="tags" [(ngModel)]="myFile.tags" id="tags"></p>
-      <p>Favourite : <input type="checkbox" name="favourite" [(ngModel)]="myFile.favourite"></p>
+    <form *ngIf="file != null" [formGroup]="fileForm" >
+      <p>Name : <input id="name" name="name"  placeholder="{{myFile.name}}"></p>
+      <p>Description : <input  name="description" id="description" formControlName="description"> </p>
+      <p>Tags : <input name="tags"  id="tags" formControlName="tags"></p>
+      <p>Favourite : <input type="checkbox" name="favourite"  formControlName="favourite"></p>
       <p>Size : {{myFile.size.toFixed(2)}}MB</p>
-      <p>Date uploaded : {{myFile.date.toLocaleDateString()}}</p>
+      <p>Date uploaded : {{myFile.date_uploaded.toLocaleDateString()}}</p>
       <p>Type : {{myFile.type}}</p>
     </form>
 
