@@ -2,6 +2,15 @@ export interface IUser{
     username: string;
     password: string;
     showPassword: boolean;
+    family_name: string;
     code: string;
     name: string;
+}
+
+export interface newIUser{
+    username: string;
+    password: string;
+    name: string;
+    family_name: string;
+    folders : string[];
 }

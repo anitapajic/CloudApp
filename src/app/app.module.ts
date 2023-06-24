@@ -7,21 +7,27 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ProfileComponent } from './profile/profile.component';
 import {AppRoutingModule} from "./app-routing.module";
+import { UploadFileComponent } from './upload-file/upload-file.component';
+import {HttpClient, HttpClientModule} from "@angular/common/http";
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    ProfileComponent
+    ProfileComponent,
+    UploadFileComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [HttpClient],
   bootstrap: [AppComponent]
 })
 export class AppModule {

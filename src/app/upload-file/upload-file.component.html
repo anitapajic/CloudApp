@@ -1,0 +1,36 @@
+
+<!-- Upload  -->
+
+<div >
+  <form id="file-upload-form" class="uploader" enctype="multipart/form-data">
+    <!-- Add the enctype attribute with value "multipart/form-data" to enable file upload -->
+    <div>
+      <input id="file-upload" type="file" name="fileUpload" accept="*" (change)="onFileSelected($event)"/>
+    
+      <label for="file-upload" id="file-drag"  (dragover)="handleDragOver($event)" (dragleave)="handleDragLeave($event)" (drop)="handleFileSelect($event)">
+        <div id="start">
+          <i class="fa fa-download" aria-hidden="true"></i>
+          <div>Select a file or drag here</div>
+        </div>
+      </label>
+    </div>  
+  </form>
+  
+  <div >
+    <form *ngIf="file != null" class="formDiv" [formGroup]="fileForm">
+      <p>Name : <input id="name" name="name" placeholder="{{myFile.name}}"></p>
+      <p>Description : <input  name="description"  formControlName="description" id="description"></p>
+      <p>Tags : <input name="tags" formControlName="tags" id="tags"></p>
+      <p>Favourite : <input type="checkbox" name="favourite" formControlName="favourite"></p>
+      <p>Size : {{myFile.size.toFixed(2)}}MB</p>
+      <p>Date uploaded : {{myFile.date_uploaded.toLocaleDateString()}}</p>
+      <p>Type : {{myFile.type}}</p>
+    </form>      
+  </div>
+  <div class="btnd">
+    <button id="file-upload-btn" class="btn btn-primary" type="submit" (click)="uploadFile()">Upload</button>
+
+  </div>
+</div>
+
+
