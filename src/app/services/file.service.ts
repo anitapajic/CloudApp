@@ -3,6 +3,8 @@ import { IFile, metaIFile } from '../model/File';
 import { environment } from 'src/environments/environment';
 import { CognitoService } from './cognito.service';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import { JsonPipe } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class FileService {
 
   constructor(private cognito: CognitoService, private http:HttpClient) { }
   
-  meta : string = 'https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/files';
+  meta : string = 'https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/';
 
 
   
@@ -25,7 +27,7 @@ export class FileService {
 
     var fileDir =  '/' + file.username + '/' + typeFolder + '/' + file.name
 
-    file.id = '\''+fileDir + '\''
+    file.id = fileDir 
 
 
     const httpOptions = {
@@ -116,7 +118,7 @@ export class FileService {
     }
 
     console.log(meta)
-    this.http.post(this.meta, JSON.stringify(meta)).subscribe(
+    this.http.post(this.meta + "files", JSON.stringify(meta)).subscribe(
       (response) => {
         console.log(response);
       },
@@ -127,12 +129,14 @@ export class FileService {
 
   }
 
-
+  getFolders(prefix: string): Observable<string[]> {
+    return this.http.get<string[]>(this.meta + 'bucket/' + prefix);
+  }
 
   getFiles(){
 
     // %2F je znak za / koji treba da ostane
-    this.http.get(this.meta + '/' + '\'%2Ftamara@gmail.com%2Fphotos%2FDesktop-4.jpg\'').subscribe(
+    this.http.get(this.meta + 'files' + '\'%2Ftamara@gmail.com%2Fphotos%2FDesktop-4.jpg\'').subscribe(
       (response) => {
         console.log(response);
       },
@@ -141,17 +145,7 @@ export class FileService {
       }
     );
   }
-  // async encodeFileToBase64(file: File){
-  //   var encodedFile!: any;
 
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(file);
-  //   reader.onload = () => {
-  //     encodedFile = reader.result as string
-  //     return encodedFile.split(',')[1];
-  //   }
-
-  // }
 
 }
 

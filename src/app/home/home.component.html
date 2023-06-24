@@ -60,13 +60,18 @@
                             <th>Size</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr onclick="handleClick('folder1')">
-                            <td><i class="fas fa-folder"></i> Folder 1</td>
+                        <tr (click)="changeFolder('/')" *ngIf="rootFolder != currentFolder">
+                          <td><i class="fas fa-folder" ></i>/</td>
+                          <td>Folder</td>
+                          <td>-</td>
+                        </tr>
+                        <tbody *ngFor="let obj of folders">
+                          <tr (click)="isFile(obj) &&changeFolder(obj)" >
+                            <td><i class="fas fa-folder" ></i>{{obj}}</td>
                             <td>Folder</td>
                             <td>-</td>
                           </tr>
-                          <tr onclick="handleClick('folder2')">
+                          <!-- <tr onclick="handleClick('folder2')">
                             <td><i class="fas fa-folder"></i> Folder 2</td>
                             <td>Folder</td>
                             <td>-</td>
@@ -80,7 +85,7 @@
                             <td><i class="fas fa-file"></i> File 2</td>
                             <td>File</td>
                             <td>5 KB</td>
-                          </tr>
+                          </tr> -->
                         </tbody>
                       </table>
                       
