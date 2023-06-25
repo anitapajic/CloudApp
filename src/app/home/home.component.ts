@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { FileService } from '../services/file.service';
 import { CognitoService } from '../services/cognito.service';
 import { newIUser } from '../model/User';
@@ -9,15 +9,19 @@ import { newIUser } from '../model/User';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit{
-  
+
+  @ViewChild('pictureModal', { static: false }) pictureModal!: ElementRef;
+  @ViewChild('pictureDisplay', { static: false }) pictureDisplay!: ElementRef;
+
   isActiveDash:boolean =true;
   isActiveFolder:boolean =false;
-  isActiveFav:boolean =false;  
+  isActiveFav:boolean =false;
   folders : string[] = [];
   previousFolder!: string;
   currentFolder! :string;
   rootFolder!: string;
   sharedFolders : string[] = [];
+  pictureData: any;
 
   constructor(private fileService: FileService, private cognito: CognitoService) { }
   ngOnInit(): void {
@@ -31,7 +35,7 @@ export class HomeComponent implements OnInit{
     }
     )
 
-    
+
 
   }
   getFolders(){
@@ -46,7 +50,7 @@ export class HomeComponent implements OnInit{
         console.error(error);
         // Handle the error here
       }
-    );    
+    );
   }
 
   getShared(){
@@ -55,12 +59,12 @@ export class HomeComponent implements OnInit{
       (response : any) => {
         this.sharedFolders = response.data['folders']
         this.folders = [...this.folders, ...this.sharedFolders];
-      
 
-    }  
+
+    }
     );
-        
-   
+
+
   }
   selectedButton: string = 'dashboard';
 
@@ -76,7 +80,7 @@ export class HomeComponent implements OnInit{
     console.log("Clicked:", item);
     // Handle the click event for the clicked item here
   }
-  
+
   isFile(obj: string): boolean {
     return obj.includes('.') && !obj.includes('/');
   }
@@ -111,7 +115,22 @@ export class HomeComponent implements OnInit{
         console.error(error);
         // Handle the error here
       }
-    );   
+    );
   }
-  
+
+  openPicture(){
+    this.fileService.getPictureData().subscribe(
+      (response) => {
+        console.log(response);
+        const imageUrl = URL.createObjectURL(response);
+        this.pictureDisplay.nativeElement.src = imageUrl;
+        console.log(imageUrl);
+        this.pictureModal.nativeElement.style.display = 'block';
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
+
 }

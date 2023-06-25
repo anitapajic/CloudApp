@@ -3,7 +3,6 @@ import { CognitoService } from '../services/cognito.service';
 import { Router } from '@angular/router';
 import { IUser, newIUser } from '../model/User';
 import { FormControl, FormGroup } from '@angular/forms';
-import {Auth} from "aws-amplify";
 
 @Component({
   selector: 'app-login',
@@ -49,7 +48,7 @@ export class LoginComponent implements OnInit{
         folders : ['bucket-tim19/'+ user.username]
     }
     this.cognitoService.uploadUser(newUser);
-  
+
 
 
     }).catch((error) =>{

@@ -13,11 +13,11 @@ export class FileService {
   s3_path: string = 'https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/tim19-bucket';
 
   constructor(private cognito: CognitoService, private http:HttpClient) { }
-  
+
   meta : string = 'https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/';
 
 
-  
+
   async uploadFile(file : IFile){
 
     await this.cognito.getUser().then((value: any) => {
@@ -25,9 +25,9 @@ export class FileService {
     })
     var typeFolder = this.findFolder(file.type.split('/')[0]);
 
-    var fileDir =  '/' + file.username + '/' + typeFolder + '/' + file.name
+    var fileDir = file.username + '/' + typeFolder + '/' + file.name
 
-    file.id = fileDir 
+    file.id = fileDir
 
 
     const httpOptions = {
@@ -36,49 +36,46 @@ export class FileService {
       })
     };
 
-    // const reader = new FileReader();
-    // reader.readAsDataURL(file.file);
-    // reader.onload = () => {
-    //   var encodedFile = reader.result as string
-    //   encodedFile =  encodedFile.split(',')[1];
+    const reader = new FileReader();
+    reader.readAsDataURL(file.file);
+    reader.onload = () => {
+      var encodedFile = reader.result as string
+      encodedFile =  encodedFile.split(',')[1];
+      this.uploadFileData(file, encodedFile);
+      if(file.favourite){
+        file.id = file.username + '/favourites/' + file.name
+        this.uploadFileData(file, encodedFile);
 
-     
-    
-      this.http.put(this.s3_path + fileDir, file.file).subscribe(
-        (response) => {
-          console.log(response);
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
+      }
+
+
+    }
+
+
+    // this.http.put(this.s3_path + fileDir, file.file).subscribe(
+    //   (response) => {
+    //     console.log(response);
+    //   },
+    //   (error) => {
+    //     console.error(error);
+    //   }
+    // );
 
 
     // }
 
 
 
-  
+
     // const formData = new FormData();
     // formData.append('file', file.file)
     // formData.append('id', file.id)
 
-   
-    if(file.favourite){
-      fileDir = '/' + file.username + '/favourites/' + file.name
-      this.http.put<any>(this.s3_path + fileDir , file.file).subscribe(
-        (response) => {
-          console.log(response);
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
 
-    }
+
 
     //kad sve zavrsi upisi metadata
-    this.uploadFileData(file);
+    // this.uploadFileData(file);
 
   }
 
@@ -95,14 +92,7 @@ export class FileService {
 
 
 
-  uploadFileData(file: IFile){
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      })
-    };
-
+  uploadFileData(file: IFile, encodedFile : string){
 
     var meta : metaIFile = {
       id: file.id,
@@ -114,10 +104,10 @@ export class FileService {
       username : file.username,
       size: file.size.toString(),
       date_uploaded : file.date_uploaded,
-      date_modified : file.date_modified
+      date_modified : file.date_modified,
+      file : encodedFile
     }
 
-    console.log(meta)
     this.http.post(this.meta + "files", JSON.stringify(meta)).subscribe(
       (response) => {
         console.log(response);
@@ -132,7 +122,17 @@ export class FileService {
   getFolders(prefix: string): Observable<string[]> {
     return this.http.get<string[]>(this.meta + 'bucket/' + prefix);
   }
-  
+
+
+  test(){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      })
+    };
+
+    return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/tim19-bucket/anitaapajic@gmail.com/photos/Desktop-1.jpg', { responseType: 'blob' })
+  }
 
   getFiles(){
 
@@ -148,6 +148,11 @@ export class FileService {
   }
 
 
+
+
+  getPictureData() : Observable<any> {
+    return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/tim19-bucket/tamara@gmail.com/photos/atrakcije-agent.png', { responseType: 'blob' })
+
+  }
+
 }
-
-
