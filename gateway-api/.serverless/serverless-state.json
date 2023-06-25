@@ -169,6 +169,12 @@
               "LogGroupName": "/aws/lambda/file-api-dev-getBucket"
             }
           },
+          "GetSharedBucketLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/file-api-dev-getSharedBucket"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -260,7 +266,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/file-api/dev/1687615962350-2023-06-24T14:12:42.350Z/createUser.zip"
+                "S3Key": "serverless/file-api/dev/1687694655910-2023-06-25T12:04:15.910Z/createUser.zip"
               },
               "Handler": "createUsers/create_users.create",
               "Runtime": "python3.7",
@@ -285,7 +291,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/file-api/dev/1687615962350-2023-06-24T14:12:42.350Z/getUsers.zip"
+                "S3Key": "serverless/file-api/dev/1687694655910-2023-06-25T12:04:15.910Z/getUsers.zip"
               },
               "Handler": "getUsers/get_users.get_all",
               "Runtime": "python3.7",
@@ -310,7 +316,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/file-api/dev/1687615962350-2023-06-24T14:12:42.350Z/getUser.zip"
+                "S3Key": "serverless/file-api/dev/1687694655910-2023-06-25T12:04:15.910Z/getUser.zip"
               },
               "Handler": "getUser/get_user.get_one",
               "Runtime": "python3.7",
@@ -335,7 +341,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/file-api/dev/1687615962350-2023-06-24T14:12:42.350Z/createFile.zip"
+                "S3Key": "serverless/file-api/dev/1687694655910-2023-06-25T12:04:15.910Z/createFile.zip"
               },
               "Handler": "createFiles/create_files.create",
               "Runtime": "python3.7",
@@ -360,7 +366,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/file-api/dev/1687615962350-2023-06-24T14:12:42.350Z/getFiles.zip"
+                "S3Key": "serverless/file-api/dev/1687694655910-2023-06-25T12:04:15.910Z/getFiles.zip"
               },
               "Handler": "getFiles/get_files.get_all",
               "Runtime": "python3.7",
@@ -385,7 +391,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/file-api/dev/1687615962350-2023-06-24T14:12:42.350Z/getFile.zip"
+                "S3Key": "serverless/file-api/dev/1687694655910-2023-06-25T12:04:15.910Z/getFile.zip"
               },
               "Handler": "getFile/get_file.get_one",
               "Runtime": "python3.7",
@@ -410,7 +416,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/file-api/dev/1687615962350-2023-06-24T14:12:42.350Z/getBucket.zip"
+                "S3Key": "serverless/file-api/dev/1687694655910-2023-06-25T12:04:15.910Z/getBucket.zip"
               },
               "Handler": "getBucket/get_bucket.get_one",
               "Runtime": "python3.7",
@@ -426,6 +432,31 @@
             },
             "DependsOn": [
               "GetBucketLogGroup"
+            ]
+          },
+          "GetSharedBucketLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/file-api/dev/1687694655910-2023-06-25T12:04:15.910Z/getSharedBucket.zip"
+              },
+              "Handler": "getSharedBucket/get_bucket.get_one",
+              "Runtime": "python3.7",
+              "FunctionName": "file-api-dev-getSharedBucket",
+              "MemorySize": 128,
+              "Timeout": 10,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "GetSharedBucketLogGroup"
             ]
           },
           "CreateUserLambdaVersionkw1xhc8Qb7LsCAyBgIiWfGN366Ah7PUZqaRMMU": {
@@ -496,6 +527,16 @@
                 "Ref": "GetBucketLambdaFunction"
               },
               "CodeSha256": "qr9Wzip7x/fCE4JVGqr/oHTaZ50VFkJZwhVwk0kzpKc="
+            }
+          },
+          "GetSharedBucketLambdaVersionkiamqitLjVOOqHrWOOrA09D9JRAI5Xez0cILr2KuM": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GetSharedBucketLambdaFunction"
+              },
+              "CodeSha256": "x/ZQhPT8FRZMpiOGxGQuSnVfp2vtiNl2sD65XaUv2Bk="
             }
           },
           "ApiGatewayRestApi": {
@@ -584,6 +625,33 @@
             "Properties": {
               "ParentId": {
                 "Ref": "ApiGatewayResourceBucket"
+              },
+              "PathPart": "{sufix}",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceSharedbucket": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "sharedBucket",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceSharedbucketSufixVar": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceSharedbucket"
               },
               "PathPart": "{sufix}",
               "RestApiId": {
@@ -810,6 +878,51 @@
               },
               "ResourceId": {
                 "Ref": "ApiGatewayResourceBucketSufixVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodSharedbucketSufixVarOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceSharedbucketSufixVar"
               },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
@@ -1153,6 +1266,57 @@
               "GetBucketLambdaPermissionApiGateway"
             ]
           },
+          "ApiGatewayMethodSharedbucketSufixVarGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {
+                "method.request.path.sufix": true
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceSharedbucketSufixVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "GetSharedBucketLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": [],
+              "RequestValidatorId": {
+                "Ref": "ApiGatewayFileapiRequestValidator"
+              }
+            },
+            "DependsOn": [
+              "GetSharedBucketLambdaPermissionApiGateway"
+            ]
+          },
           "ApiGatewayFileapiRequestValidator": {
             "Type": "AWS::ApiGateway::RequestValidator",
             "Properties": {
@@ -1164,7 +1328,7 @@
               "Name": "file-api-dev | Validate request body and querystring parameters"
             }
           },
-          "ApiGatewayDeployment1687615961434": {
+          "ApiGatewayDeployment1687694655078": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -1178,13 +1342,15 @@
               "ApiGatewayMethodFilesOptions",
               "ApiGatewayMethodFilesIdVarOptions",
               "ApiGatewayMethodBucketSufixVarOptions",
+              "ApiGatewayMethodSharedbucketSufixVarOptions",
               "ApiGatewayMethodUsersPost",
               "ApiGatewayMethodUsersGet",
               "ApiGatewayMethodUsersUsernameVarGet",
               "ApiGatewayMethodFilesPost",
               "ApiGatewayMethodFilesGet",
               "ApiGatewayMethodFilesIdVarGet",
-              "ApiGatewayMethodBucketSufixVarGet"
+              "ApiGatewayMethodBucketSufixVarGet",
+              "ApiGatewayMethodSharedbucketSufixVarGet"
             ]
           },
           "CreateUserLambdaPermissionApiGateway": {
@@ -1446,6 +1612,43 @@
               }
             }
           },
+          "GetSharedBucketLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetSharedBucketLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
           "userTable": {
             "Type": "AWS::DynamoDB::Table",
             "Properties": {
@@ -1561,6 +1764,15 @@
             },
             "Export": {
               "Name": "sls-file-api-dev-GetBucketLambdaFunctionQualifiedArn"
+            }
+          },
+          "GetSharedBucketLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GetSharedBucketLambdaVersionkiamqitLjVOOqHrWOOrA09D9JRAI5Xez0cILr2KuM"
+            },
+            "Export": {
+              "Name": "sls-file-api-dev-GetSharedBucketLambdaFunctionQualifiedArn"
             }
           },
           "ServiceEndpoint": {
@@ -1978,6 +2190,52 @@
         "runtime": "python3.7",
         "vpc": {},
         "versionLogicalId": "GetBucketLambdaVersionq8TbIaa3by5XVtRGXx2FlF288iaxj4ZOE4KRerUFhkE"
+      },
+      "getSharedBucket": {
+        "handler": "getSharedBucket/get_bucket.get_one",
+        "package": {
+          "include": [
+            "getSharedBucket/**"
+          ],
+          "artifact": "/Users/tamaradzambic/Desktop/CloudApp/gateway-api/.serverless/getSharedBucket.zip"
+        },
+        "events": [
+          {
+            "http": {
+              "path": "sharedBucket/{sufix}",
+              "method": "get",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "X-Amzn-Trace-Id"
+                ],
+                "allowCredentials": false
+              },
+              "request": {
+                "parameters": {
+                  "method.request.path.sufix": true
+                }
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "file-api-dev-getSharedBucket",
+        "memory": 128,
+        "timeout": 10,
+        "runtime": "python3.7",
+        "vpc": {},
+        "versionLogicalId": "GetSharedBucketLambdaVersionkiamqitLjVOOqHrWOOrA09D9JRAI5Xez0cILr2KuM"
       }
     },
     "resources": {
@@ -2044,7 +2302,7 @@
           "utility/**"
         ],
         "artifactsS3KeyDirname": "serverless/file-api/dev/code-artifacts",
-        "artifactDirectoryName": "serverless/file-api/dev/1687615962350-2023-06-24T14:12:42.350Z"
+        "artifactDirectoryName": "serverless/file-api/dev/1687694655910-2023-06-25T12:04:15.910Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -2058,7 +2316,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/file-api/dev/1687615962350-2023-06-24T14:12:42.350Z",
+    "artifactDirectoryName": "serverless/file-api/dev/1687694655910-2023-06-25T12:04:15.910Z",
     "artifact": ""
   }
 }

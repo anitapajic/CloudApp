@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FileService } from '../services/file.service';
 import { CognitoService } from '../services/cognito.service';
+import { newIUser } from '../model/User';
 
 @Component({
   selector: 'app-home',
@@ -12,33 +13,54 @@ export class HomeComponent implements OnInit{
   isActiveDash:boolean =true;
   isActiveFolder:boolean =false;
   isActiveFav:boolean =false;  
-  folders : string[] = new Array();
+  folders : string[] = [];
   previousFolder!: string;
   currentFolder! :string;
   rootFolder!: string;
+  sharedFolders : string[] = [];
 
   constructor(private fileService: FileService, private cognito: CognitoService) { }
   ngOnInit(): void {
+
+
     this.cognito.getUser().then((user)=>{
       this.currentFolder = user.attributes['email'];
       this.rootFolder = this.currentFolder;
-      this.fileService.getFolders(this.currentFolder)
-      .subscribe(
-        (folders: any) => {
-          this.folders = folders['files'];
-          console.log(this.folders);
-          // Further actions with the folders
-        },
-        (error: any) => {
-          console.error(error);
-          // Handle the error here
-        }
-      );    
 
+      this.getFolders()
     }
     )
 
+    
 
+  }
+  getFolders(){
+    this.fileService.getFolders(this.currentFolder)
+    .subscribe(
+      (folders: any) => {
+        this.folders = folders['files'];
+        this.getShared()
+
+        },
+      (error: any) => {
+        console.error(error);
+        // Handle the error here
+      }
+    );    
+  }
+
+  getShared(){
+    // rootFolder je username
+    this.cognito.getUserData(this.rootFolder).subscribe(
+      (response : any) => {
+        this.sharedFolders = response.data['folders']
+        this.folders = [...this.folders, ...this.sharedFolders];
+      
+
+    }  
+    );
+        
+   
   }
   selectedButton: string = 'dashboard';
 
@@ -56,7 +78,7 @@ export class HomeComponent implements OnInit{
   }
   
   isFile(obj: string): boolean {
-    return !obj.includes('.');
+    return obj.includes('.') && !obj.includes('/');
   }
 
   changeFolder(obj : string){
@@ -70,10 +92,17 @@ export class HomeComponent implements OnInit{
       this.previousFolder = this.currentFolder;
       this.currentFolder = this.currentFolder + "%2F" + obj;
     }
-    this.fileService.getFolders(this.currentFolder)
+    let test = this.currentFolder
+    if(obj.includes('/') && obj.length > 1){
+      test = obj.replaceAll('/', '%2F')
+    }
+    this.fileService.getFolders(test)
     .subscribe(
       (folders: any) => {
         this.folders = folders['files'];
+        if (this.rootFolder == this.currentFolder){
+          this.getShared()
+        }
 
         console.log(this.folders);
         // Further actions with the folders

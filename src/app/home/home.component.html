@@ -66,7 +66,7 @@
                           <td>-</td>
                         </tr>
                         <tbody *ngFor="let obj of folders">
-                          <tr (click)="isFile(obj) &&changeFolder(obj)" >
+                          <tr (click)="!isFile(obj) &&changeFolder(obj)" >
                             <td><i class="fas fa-folder" ></i>{{obj}}</td>
                             <td>Folder</td>
                             <td>-</td>

@@ -138,7 +138,19 @@ functions:
             parameters:
               paths:
                 sufix: true
-
+  getSharedBucket:
+    handler: getSharedBucket/get_bucket.get_one
+    package:
+      include: 'getSharedBucket/**'
+    events:
+      - http:
+          path: sharedBucket/{sufix}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                sufix: true
 resources:
   Resources:
     userTable:

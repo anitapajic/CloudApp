@@ -63,6 +63,10 @@ export class CognitoService {
 
   }
 
+  getUserData(username : string){
+     return this.http.get(this.s3_path + '/' + username )
+  }
+
 
 
 }

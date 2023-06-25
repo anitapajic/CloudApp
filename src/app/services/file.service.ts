@@ -132,6 +132,7 @@ export class FileService {
   getFolders(prefix: string): Observable<string[]> {
     return this.http.get<string[]>(this.meta + 'bucket/' + prefix);
   }
+  
 
   getFiles(){
 
