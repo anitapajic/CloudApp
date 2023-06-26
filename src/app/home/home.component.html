@@ -7,22 +7,22 @@
 
 
       <button class="menu-button" >
-        <span class="button-icon">
+        <span class="button-icon" [class.clicked]="page === 'dashboard'">
           <i class="fas fa-chart-line ic" ></i>
         </span>
-        <span class="button-text" (click)="changePage('dashboard')" >Dashboard</span>
+        <span class="button-text" [class.clicked]="page === 'dashboard'" (click)="changePage('dashboard')" >Dashboard</span>
       </button>
-      <button class="menu-button" >
+      <button class="menu-button" [class.clicked]="page === 'main'">
+        <span class="button-icon">
+          <i class="fas  fa-folder ic" ></i>
+        </span>
+        <span class="button-text" [class.clicked]="page === 'main'" (click)="changePage('main')" >My Folder</span>
+      </button>
+        <button class="menu-button" [class.clicked]="page === 'shared'">
         <span class="button-icon">
           <i class="fas  fa-folder ic"></i>
         </span>
-        <span class="button-text" (click)="changePage('main')" >My Folder</span>
-      </button>
-        <button class="menu-button">
-        <span class="button-icon">
-          <i class="fas  fa-folder ic"></i>
-        </span>
-          <span class="button-text" (click)="changePage('shared')">Shared folders</span>
+          <span class="button-text" [class.clicked]="page === 'shared'" (click)="changePage('shared')">Shared folders</span>
         </button>
         
       <button class="menu-button" >

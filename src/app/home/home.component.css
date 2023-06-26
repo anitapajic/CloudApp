@@ -52,6 +52,11 @@ body {
     background-color: linear-gradient(to right, #4EB1B6, #98CDCF);
   }
 
+  .clicked {
+    color: #0f555b;
+    background-color: linear-gradient(to right, #4EB1B6, #98CDCF);
+  }
+
   .button-icon {
     width: 53px;
     height: 53px;

@@ -29,13 +29,6 @@ export class FileService {
 
     file.id = fileDir
 
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      })
-    };
-
     const reader = new FileReader();
     reader.readAsDataURL(file.file);
     reader.onload = () => {
@@ -48,34 +41,7 @@ export class FileService {
 
       }
 
-
     }
-
-
-    // this.http.put(this.s3_path + fileDir, file.file).subscribe(
-    //   (response) => {
-    //     console.log(response);
-    //   },
-    //   (error) => {
-    //     console.error(error);
-    //   }
-    // );
-
-
-    // }
-
-
-
-
-    // const formData = new FormData();
-    // formData.append('file', file.file)
-    // formData.append('id', file.id)
-
-
-
-
-    //kad sve zavrsi upisi metadata
-    // this.uploadFileData(file);
 
   }
 
@@ -135,33 +101,6 @@ export class FileService {
   getFolders(prefix: string): Observable<string[]> {
     return this.http.get<string[]>(this.meta + 'bucket/' + prefix);
   }
-
-
-  test(){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      })
-    };
-
-    return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/tim19-bucket/anitaapajic@gmail.com/photos/Desktop-1.jpg', { responseType: 'blob' })
-  }
-
-  getFiles(){
-
-    // %2F je znak za / koji treba da ostane
-    this.http.get(this.meta + 'files' + '\'%2Ftamara@gmail.com%2Fphotos%2FDesktop-4.jpg\'').subscribe(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
-
-
-
 
   getPictureData(sufix : string) : Observable<any> {
     return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/files/' + sufix)
