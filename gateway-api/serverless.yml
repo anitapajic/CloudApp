@@ -113,6 +113,16 @@ functions:
           path: files
           method: post
           cors: true
+  updateFile:
+    handler: updateFile/update_file.create
+    package:
+      include: 'updateFile/**'
+    events:
+      - http:
+          path: files
+          method: put
+          cors: true
+
   getFiles:
     handler: getFiles/get_files.get_all
     package:

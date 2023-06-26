@@ -108,7 +108,21 @@ export class FileService {
       file : encodedFile
     }
 
+    console.log(meta);
     this.http.post(this.meta + "files", JSON.stringify(meta)).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.log(meta);
+        console.error(error);
+      }
+    );
+
+  }
+
+  updateFile(meta:metaIFile){
+    this.http.put(this.meta + "files", JSON.stringify(meta)).subscribe(
       (response) => {
         console.log(response);
       },
@@ -116,7 +130,6 @@ export class FileService {
         console.error(error);
       }
     );
-
   }
 
   getFolders(prefix: string): Observable<string[]> {

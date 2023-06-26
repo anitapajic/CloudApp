@@ -99,17 +99,28 @@
 
                 </div>
                   <div class="fileDataDiv">
-                    <div *ngIf="myImage" class="imageDiv">
+                    <div *ngIf="isImage" class="imageDiv">
                       <img style="width: 300px" [src]="myImage" />
                     </div>
-                    <div *ngIf="data" class="metaDataDiv">
-                      <p>Size: {{data.size}}</p>
-                      <p>Date Modified: <input type="text" [(ngModel)]="data.date_modified" [disabled]="!isEditMode"></p>
-                      <p>Date Uploaded: <input type="text" [(ngModel)]="data.date_uploaded" [disabled]="!isEditMode"></p>
-                      <p>Owner: {{data.username}}</p>
-                      <p>Description: <input type="text" [(ngModel)]="data.description" [disabled]="!isEditMode"></p>
-                      <p>Name: <input type="text" [(ngModel)]="data.name" [disabled]="!isEditMode"></p>
-                      <p>Type: {{data.type}}</p>
+                    <div *ngIf="isVideo">
+                      <video controls>
+                        <source [src]="myVideo" type="video/mp4">
+                      </video>
+                    </div>
+                    <div *ngIf="isPDF">
+                      <object style="width: 300px" [attr.data]="myPDF " type="application/pdf" ></object>
+                    </div>
+                    <div *ngIf="dataIsFull" class="metaDataDiv">
+                      <p>Size: {{ data.size }}</p>
+                      <p>Date Modified: {{data.date_modified}}}</p>
+                      <p>Date Uploaded: {{data.date_uploaded}}</p>
+                      <p>Owner: {{ data.username }}</p>
+                      <p>Description:
+                        <input type="text" [value]="isEditMode ? tempData.description : data.description" (input)="updateDescription($event)" [disabled]="!isEditMode">
+                      </p>
+                      <p>Name:
+                        <input type="text" [value]="isEditMode ? tempData.name : data.name" (input)="updateName($event)" [disabled]="!isEditMode">
+                      </p><p>Type: {{ data.type }}</p>
                       <button (click)="toggleEditMode()">{{ isEditMode ? 'Save' : 'Edit' }}</button>
                     </div>
                   </div>

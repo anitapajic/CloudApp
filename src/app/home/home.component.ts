@@ -21,12 +21,23 @@ export class HomeComponent implements OnInit{
   rootFolder!: string;
   sharedFolders : string[] = [];
   myImage! : SafeResourceUrl ;
+  myVideo! : SafeResourceUrl ;
+  myPDF! : SafeResourceUrl ;
   data! : metaIFile;
   isEditMode = false;
+  isImage = false;
+  isVideo = false;
+  isPDF = false;
+  dataIsFull = false;
+  tempData! : any;
 
   constructor(private fileService: FileService, private cognito: CognitoService, private sanitizer: DomSanitizer) { }
   ngOnInit(): void {
 
+    this.isImage = false;
+    this.isVideo = false;
+    this.isPDF = false;
+    this.dataIsFull = false;
 
     this.cognito.getUser().then((user)=>{
       this.currentFolder = user.attributes['email'];
@@ -92,10 +103,18 @@ export class HomeComponent implements OnInit{
     if(obj == '/'){
       this.currentFolder = this.previousFolder;
       this.previousFolder = this.rootFolder;
+      this.isImage = false;
+      this.isVideo = false;
+      this.isPDF = false;
+      this.dataIsFull = false;
     }
     else{
       this.previousFolder = this.currentFolder;
       this.currentFolder = this.currentFolder + "%2F" + obj;
+      this.isImage = false;
+      this.isVideo = false;
+      this.isPDF = false;
+      this.dataIsFull = false;
     }
     let test = this.currentFolder
     if(obj.includes('/') && obj.length > 1){
@@ -124,7 +143,19 @@ export class HomeComponent implements OnInit{
       (response) => {
         let encodedFile = response['file']
         let encodedData = response['data']
-        this.myImage = 'data:image/jpeg;base64,' + encodedFile;
+        if(encodedData.type.includes('image')){
+          this.isImage = true;
+          this.myImage = 'data:image/jpeg;base64,' + encodedFile;
+        }
+        else if(encodedData.type.includes('video')){
+          this.isVideo = true;
+          this.myVideo = 'data:video/mp4;base64,' + encodedFile;
+        }
+        else if(encodedData.type.includes('pdf')){
+          this.isPDF = true;
+          this.myPDF = this.sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,' + encodedFile);
+        }
+        this.dataIsFull = true;
         this.data = encodedData;
       },
       (error) => {
@@ -134,6 +165,22 @@ export class HomeComponent implements OnInit{
   }
   toggleEditMode() {
     this.isEditMode = !this.isEditMode;
+    if (this.isEditMode) {
+      this.tempData = JSON.parse(JSON.stringify(this.data));
+    } else {
+      this.data.name = this.tempData.name;
+      this.data.description = this.tempData.description;
+      this.data.date_modified = new Date();
+      this.fileService.updateFile(this.data);
+    }
+  }
+
+  updateDescription(event:any) {
+    this.tempData.description = event.target.value;
+  }
+
+  updateName(event:any) {
+    this.tempData.name = event.target.value;
   }
 
 
