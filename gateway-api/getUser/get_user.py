@@ -12,8 +12,6 @@ dynamodb = boto3.resource('dynamodb')
 def get_one(event, context):
     # Extract data from request
 
-    print(event)
-
     path = event['pathParameters']['username']
     # Decode name in URL (eg. decode %20 to whitespace)
     path = unquote(path)

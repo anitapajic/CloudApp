@@ -3,11 +3,11 @@ body {
     grid-template-columns: 280px 1fr;
     gap: 40px;
   }
-  
+
   #menu {
     background-color: #FFFFFF;
     margin-left: 0;
-    
+
   }
   .logo{
     margin-left: 38px;
@@ -24,7 +24,7 @@ body {
     font-weight: bold;
     margin-bottom: 10px;
   }
-  
+
   #separator {
     border-top: 3px solid #c1e166;
     margin-bottom: 20px;
@@ -46,12 +46,12 @@ body {
     cursor: pointer;
     transition: background-color 0.3s;
   }
-  
+
   .menu-button:hover {
     color: #0f555b;
     background-color: linear-gradient(to right, #4EB1B6, #98CDCF);
   }
-  
+
   .button-icon {
     width: 53px;
     height: 53px;
@@ -80,25 +80,25 @@ body {
     border-radius: 5px;
     padding: 20px;
     display: flex;
-    flex-direction: column;    
+    flex-direction: column;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     transition: transform 0.6s ease;
   }
   .card:hover {
     transform: scale(1.03);
   }
-  
+
   .card-icon {
     align-self: flex-start;
   }
-  
+
   .card-icon i {
     margin-top: 10px;
     font-size: 34px;
     margin-bottom: 10px;
     color: #d2e98f;
   }
-  
+
   .card-content {
     flex-grow: 1;
     display: flex;
@@ -106,7 +106,7 @@ body {
     color: #FFFFFF;
     margin-bottom: 30px;
   }
-  
+
   .card-title {
     margin: 0;
   }
@@ -126,7 +126,7 @@ body {
     width: 100%;
     border-collapse: collapse;
   }
-  
+
   #file-system th,
   #file-system td {
     padding: 10px;
@@ -134,7 +134,7 @@ body {
     border-bottom: 1px solid #ccc;
     color: #0f555b;
   }
-  
+
   #file-system th {
     background-color: #f2f2f2;
     font-weight: bold;
@@ -142,25 +142,25 @@ body {
   #file-system tbody tr {
     background-color: #FFFFFF;
   }
-  
+
   #file-system tbody tr:hover {
     background-color: #d8d4d4;
     cursor: pointer;
   }
-  
+
   #file-system i {
     margin-right: 5px;
   }
-  
+
   .upload {
     display: flex;
     background-color: #FFFFFF;
     border-radius: 5px;
     height: 100%;
-    padding: 10px;    
+    padding: 10px;
   flex-direction: column;
   }
-  
+
   .upload-title {
     padding: 10px;
     font-weight: bold;
@@ -169,18 +169,25 @@ body {
   .context {
     display: flex;
   }
-  
+
   .left-column {
     flex: 1;
     margin-right: 20px;
   }
-  
+
   .right-column {
     flex: 0 0 350px;
   }
-  
+
   /* Rest of the CSS remains the same */
-    
+
   .upload-content {
     padding: 10px;
+  }
+  .fileDataDiv{
+    margin-top: 30px;
+    margin-left: 10px;
+  }
+  .metaDataDiv{
+    margin-top: 30px;
   }

@@ -108,7 +108,21 @@ export class FileService {
       file : encodedFile
     }
 
+    console.log(meta);
     this.http.post(this.meta + "files", JSON.stringify(meta)).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.log(meta);
+        console.error(error);
+      }
+    );
+
+  }
+
+  updateFile(meta:metaIFile){
+    this.http.put(this.meta + "files", JSON.stringify(meta)).subscribe(
       (response) => {
         console.log(response);
       },
@@ -116,7 +130,6 @@ export class FileService {
         console.error(error);
       }
     );
-
   }
 
   getFolders(prefix: string): Observable<string[]> {
@@ -150,8 +163,8 @@ export class FileService {
 
 
 
-  getPictureData() : Observable<any> {
-    return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/tim19-bucket/tamara@gmail.com/photos/atrakcije-agent.png', { responseType: 'blob' })
+  getPictureData(sufix : string) : Observable<any> {
+    return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/files/' + sufix)
 
   }
 
