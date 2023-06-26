@@ -3,6 +3,7 @@ import { FileService } from '../services/file.service';
 import { CognitoService } from '../services/cognito.service';
 import { newIUser } from '../model/User';
 import { DomSanitizer, SafeResourceUrl  } from '@angular/platform-browser';
+import {metaIFile} from "../model/File";
 
 @Component({
   selector: 'app-home',
@@ -19,8 +20,9 @@ export class HomeComponent implements OnInit{
   currentFolder! :string;
   rootFolder!: string;
   sharedFolders : string[] = [];
-  pictureData: any;
   myImage! : SafeResourceUrl ;
+  data! : metaIFile;
+  isEditMode = false;
 
   constructor(private fileService: FileService, private cognito: CognitoService, private sanitizer: DomSanitizer) { }
   ngOnInit(): void {
@@ -121,13 +123,17 @@ export class HomeComponent implements OnInit{
     this.fileService.getPictureData(this.currentFolder + "%2F" + pictureName).subscribe(
       (response) => {
         let encodedFile = response['file']
-        console.log(encodedFile)
+        let encodedData = response['data']
         this.myImage = 'data:image/jpeg;base64,' + encodedFile;
+        this.data = encodedData;
       },
       (error) => {
         console.error('Error getting picture data:', error);
       }
     );
+  }
+  toggleEditMode() {
+    this.isEditMode = !this.isEditMode;
   }
 
 

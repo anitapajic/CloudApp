@@ -18,11 +18,17 @@
         </span>
         <span class="button-text">My Folder</span>
       </button>
+        <button class="menu-button" >
+        <span class="button-icon">
+          <i class="fas  fa-folder ic"></i>
+        </span>
+          <span class="button-text">Shared folders</span>
+        </button>
       <button class="menu-button" >
         <span class="button-icon">
           <i class="fas fa-heart ic"></i>
         </span>
-        <span class="button-text">Favorite</span>
+        <span class="button-text">Favourite</span>
       </button>
     </div>
 
@@ -92,8 +98,20 @@
                       </table>
 
                 </div>
-                  <div *ngIf="myImage">
-                    <img style="width: 300px" [src]="myImage" />
+                  <div class="fileDataDiv">
+                    <div *ngIf="myImage" class="imageDiv">
+                      <img style="width: 300px" [src]="myImage" />
+                    </div>
+                    <div *ngIf="data" class="metaDataDiv">
+                      <p>Size: {{data.size}}</p>
+                      <p>Date Modified: <input type="text" [(ngModel)]="data.date_modified" [disabled]="!isEditMode"></p>
+                      <p>Date Uploaded: <input type="text" [(ngModel)]="data.date_uploaded" [disabled]="!isEditMode"></p>
+                      <p>Owner: {{data.username}}</p>
+                      <p>Description: <input type="text" [(ngModel)]="data.description" [disabled]="!isEditMode"></p>
+                      <p>Name: <input type="text" [(ngModel)]="data.name" [disabled]="!isEditMode"></p>
+                      <p>Type: {{data.type}}</p>
+                      <button (click)="toggleEditMode()">{{ isEditMode ? 'Save' : 'Edit' }}</button>
+                    </div>
                   </div>
                 </div>
                 <div class="right-column">

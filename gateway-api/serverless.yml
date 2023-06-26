@@ -34,9 +34,21 @@ provider:
       Resource:
         - "Fn::GetAtt": [ fileTable, Arn ]
 
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "Fn::GetAtt": [ folderTable, Arn ]
+
   #  - Effect: Allow
   #     Action: s3:*
-  #     Resource: 
+  #     Resource:
   #       - "arn:aws:s3:::tim19-bucket"
   #       - "arn:aws:s3:::tim19-bucket/*"
 #      arn:aws:iam::439915027912:role/api-gateway-s3-role
@@ -68,7 +80,7 @@ functions:
           method: post
           # Enable CORS. Don't forget to return the right header in your response
           cors: true
-  
+
   getUsers:
     handler: getUsers/get_users.get_all
     package:
@@ -78,7 +90,7 @@ functions:
           path: users
           method: get
           cors: true
-  
+
   getUser:
     handler: getUser/get_user.get_one
     package:
@@ -179,3 +191,17 @@ resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
+
+    folderTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: folderTable
+        AttributeDefinitions:
+          - AttributeName: username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: username
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
