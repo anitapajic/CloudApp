@@ -123,6 +123,20 @@ functions:
           method: put
           cors: true
 
+  deleteFile:
+    handler: deleteFile/delete_file.delete
+    package:
+      include: 'deleteFile/**'
+    events:
+      - http:
+          path: files/{id}
+          method: delete
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+
   getFiles:
     handler: getFiles/get_files.get_all
     package:
