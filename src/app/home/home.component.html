@@ -24,7 +24,7 @@
         </span>
           <span class="button-text" (click)="changePage('shared')">Shared folders</span>
         </button>
-        
+
       <button class="menu-button" >
         <span class="button-icon">
           <i class="fas fa-sign-out-alt ic"></i>
@@ -108,6 +108,7 @@
                         <input type="text" [value]="isEditMode ? tempData.name : data.name" (input)="updateName($event)" [disabled]="!isEditMode">
                       </p><p>Type: {{ data.type }}</p>
                       <button (click)="toggleEditMode()">{{ isEditMode ? 'Save' : 'Edit' }}</button>
+                      <button *ngIf="!isEditMode" (click)="delete(data.name)">Delete</button>
                       <button *ngIf="isEditMode" (click)="cancelEdit()">Cancel</button>
                     </div>
                   </div>
