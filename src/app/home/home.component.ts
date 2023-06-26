@@ -174,6 +174,10 @@ export class HomeComponent implements OnInit{
       this.fileService.updateFile(this.data);
     }
   }
+  cancelEdit() {
+    this.isEditMode = false;
+    this.tempData = JSON.parse(JSON.stringify(this.data));
+  }
 
   updateDescription(event:any) {
     this.tempData.description = event.target.value;

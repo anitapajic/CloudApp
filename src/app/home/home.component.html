@@ -122,6 +122,7 @@
                         <input type="text" [value]="isEditMode ? tempData.name : data.name" (input)="updateName($event)" [disabled]="!isEditMode">
                       </p><p>Type: {{ data.type }}</p>
                       <button (click)="toggleEditMode()">{{ isEditMode ? 'Save' : 'Edit' }}</button>
+                      <button *ngIf="isEditMode" (click)="cancelEdit()">Cancel</button>
                     </div>
                   </div>
                 </div>
