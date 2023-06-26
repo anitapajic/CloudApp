@@ -10,25 +10,26 @@
         <span class="button-icon">
           <i class="fas fa-chart-line ic" ></i>
         </span>
-        <span class="button-text">Dashboard</span>
+        <span class="button-text" (click)="changePage('dashboard')" >Dashboard</span>
       </button>
       <button class="menu-button" >
         <span class="button-icon">
           <i class="fas  fa-folder ic"></i>
         </span>
-        <span class="button-text">My Folder</span>
+        <span class="button-text" (click)="changePage('main')" >My Folder</span>
       </button>
-        <button class="menu-button" >
+        <button class="menu-button">
         <span class="button-icon">
           <i class="fas  fa-folder ic"></i>
         </span>
-          <span class="button-text">Shared folders</span>
+          <span class="button-text" (click)="changePage('shared')">Shared folders</span>
         </button>
+        
       <button class="menu-button" >
         <span class="button-icon">
-          <i class="fas fa-heart ic"></i>
+          <i class="fas fa-sign-out-alt ic"></i>
         </span>
-        <span class="button-text">Favourite</span>
+        <span class="button-text" (click)="logout()" >Logout</span>
       </button>
     </div>
 
@@ -36,7 +37,7 @@
 
     </div>
 
-    <div id="main">
+    <div id="main" *ngIf="page == 'main'">
         <div class="mainm">
             <div id="title">My Cloud</div>
             <div id="separator"></div>
@@ -72,28 +73,13 @@
                           <td>-</td>
                         </tr>
                         <tbody *ngFor="let obj of folders">
-                        <tr (click)="isFile(obj) ? openPicture(obj) : changeFolder(obj)">
+                        <tr (click)="isFile(obj) ? openPicture(obj) : changeFolder(obj)" *ngIf="obj.length > 1">
                           <td>
                             <i [class]="isFile(obj) ? 'fas fa-file' : 'fas fa-folder'"></i>{{ obj }}
                           </td>
                           <td>{{ isFile(obj) ? 'File' : 'Folder' }}</td>
                           <td>-</td>
                         </tr>
-                          <!-- <tr onclick="handleClick('folder2')">
-                            <td><i class="fas fa-folder"></i> Folder 2</td>
-                            <td>Folder</td>
-                            <td>-</td>
-                          </tr>
-                          <tr onclick="handleClick('file1')">
-                            <td><i class="fas fa-file"></i> File 1</td>
-                            <td>File</td>
-                            <td>10 KB</td>
-                          </tr>
-                          <tr onclick="handleClick('file2')">
-                            <td><i class="fas fa-file"></i> File 2</td>
-                            <td>File</td>
-                            <td>5 KB</td>
-                          </tr> -->
                         </tbody>
                       </table>
 
@@ -112,7 +98,7 @@
                     </div>
                     <div *ngIf="dataIsFull" class="metaDataDiv">
                       <p>Size: {{ data.size }}</p>
-                      <p>Date Modified: {{data.date_modified}}}</p>
+                      <p>Date Modified: {{data.date_modified}}</p>
                       <p>Date Uploaded: {{data.date_uploaded}}</p>
                       <p>Owner: {{ data.username }}</p>
                       <p>Description:
@@ -137,4 +123,66 @@
             </div>
         </div>
     </div>
+
+    <div id="main" *ngIf="page == 'shared'">
+      <div class="mainm">
+          <div id="title">Shared folders</div>
+          <div id="separator"></div>
+          <!-- Main Section Content Goes Here -->
+          <div class="context">
+              <div  class="left-column">
+              <div class="table">
+                  <div class="mainTitle">Folders</div>
+                  <table id="file-system">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Type</th>
+                          <th>Size</th>
+                        </tr>
+                      </thead>
+                      <tr (click)="changeFolder('/')" *ngIf="'' != currentFolder">
+                        <td><i class="fas fa-folder" ></i>/</td>
+                        <td>Folder</td>
+                        <td>-</td>
+                      </tr>
+                      <tbody *ngFor="let obj of folders">
+                      <tr (click)="isFile(obj) ? openPicture(obj) : changeFolder(obj)" *ngIf="obj.length > 1">
+                        <td>
+                          <i [class]="isFile(obj) ? 'fas fa-file' : 'fas fa-folder'"></i>{{ obj }}
+                        </td>
+                        <td>{{ isFile(obj) ? 'File' : 'Folder' }}</td>
+                        <td>-</td>
+                      </tr>
+                      </tbody>
+                    </table>
+
+              </div>
+                <div class="fileDataDiv">
+                  <div *ngIf="myImage" class="imageDiv">
+                    <img style="width: 300px" [src]="myImage" />
+                  </div>
+                  <div *ngIf="data" class="metaDataDiv">
+                    <p>Size: {{data.size}}</p>
+                    <p>Date Modified: <input type="text" [(ngModel)]="data.date_modified" [disabled]="!isEditMode"></p>
+                    <p>Date Uploaded: <input type="text" [(ngModel)]="data.date_uploaded" [disabled]="!isEditMode"></p>
+                    <p>Owner: {{data.username}}</p>
+                    <p>Description: <input type="text" [(ngModel)]="data.description" [disabled]="!isEditMode"></p>
+                    <p>Name: <input type="text" [(ngModel)]="data.name" [disabled]="!isEditMode"></p>
+                    <p>Type: {{data.type}}</p>
+                    <button (click)="toggleEditMode()">{{ isEditMode ? 'Save' : 'Edit' }}</button>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="right-column">
+              <div class="upload">
+                  <div class="upload-title">Upload</div>
+                  <div class="upload-content">
+                      <app-upload-file></app-upload-file>
+                    </div>
+              </div>
+              </div> -->
+          </div>
+      </div>
+  </div>
   </body>

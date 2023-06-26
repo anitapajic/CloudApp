@@ -4,6 +4,7 @@ import { CognitoService } from '../services/cognito.service';
 import { newIUser } from '../model/User';
 import { DomSanitizer, SafeResourceUrl  } from '@angular/platform-browser';
 import {metaIFile} from "../model/File";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -15,15 +16,21 @@ export class HomeComponent implements OnInit{
   isActiveDash:boolean =true;
   isActiveFolder:boolean =false;
   isActiveFav:boolean =false;
-  folders : string[] = [];
+  
+  rootFolder!: string;
+
   previousFolder!: string;
   currentFolder! :string;
-  rootFolder!: string;
+  folders : string[] = [];
   sharedFolders : string[] = [];
+
+
+
   myImage! : SafeResourceUrl ;
   myVideo! : SafeResourceUrl ;
   myPDF! : SafeResourceUrl ;
   data! : metaIFile;
+  page : string = 'main';
   isEditMode = false;
   isImage = false;
   isVideo = false;
@@ -31,7 +38,7 @@ export class HomeComponent implements OnInit{
   dataIsFull = false;
   tempData! : any;
 
-  constructor(private fileService: FileService, private cognito: CognitoService, private sanitizer: DomSanitizer) { }
+  constructor(private router: Router, private fileService: FileService, private cognito: CognitoService, private sanitizer: DomSanitizer) { }
   ngOnInit(): void {
 
     this.isImage = false;
@@ -46,21 +53,16 @@ export class HomeComponent implements OnInit{
       this.getFolders()
     }
     )
-
-
-
   }
+
   getFolders(){
     this.fileService.getFolders(this.currentFolder)
     .subscribe(
       (folders: any) => {
         this.folders = folders['files'];
-        this.getShared()
-
         },
       (error: any) => {
         console.error(error);
-        // Handle the error here
       }
     );
   }
@@ -69,65 +71,85 @@ export class HomeComponent implements OnInit{
     // rootFolder je username
     this.cognito.getUserData(this.rootFolder).subscribe(
       (response : any) => {
-        this.sharedFolders = response.data['folders']
-        this.folders = [...this.folders, ...this.sharedFolders];
-
-
-    }
-    );
-
-
-  }
-  selectedButton: string = 'dashboard';
-
-  selectButton(button: string): void {
-    this.selectedButton = button;
-  }
-  activityStatus(){
-    this.isActiveDash = false
-    this.isActiveFolder = true
+        this.folders = response.data['folders']
+    });
   }
 
-  handleClick(item: any) {
-    console.log("Clicked:", item);
-    // Handle the click event for the clicked item here
-  }
+  // selectedButton: string = 'dashboard';
+
+  // selectButton(button: string): void {
+  //   this.selectedButton = button;
+  // }
+  // activityStatus(){
+  //   this.isActiveDash = false
+  //   this.isActiveFolder = true
+  // }
+
+  // handleClick(item: any) {
+  //   console.log("Clicked:", item);
+  //   // Handle the click event for the clicked item here
+  // }
 
   isFile(obj: string): boolean {
-    return obj.includes('.') && !obj.includes('/');
+    if( obj.includes('.')){
+      let extension = obj.split('.')[1]
+      return extension != 'com'
+    }
+    return false;
+  }
+
+  goBack(){
+    this.currentFolder = this.previousFolder;
+    if (this.currentFolder == ''){
+      this.getShared();
+      return 
+    }
+    let index = this.previousFolder.lastIndexOf("%2F")
+    this.previousFolder = this.previousFolder.substring(0 , index);
+  }
+
+  next(obj : string){
+    console.log('obj  ', obj)
+    this.previousFolder = this.currentFolder;
+    if (this.currentFolder == ""){
+      console.log(obj)
+      this.currentFolder = obj.replace('/', '%2F');
+
+    }else{
+      this.currentFolder = this.currentFolder + "%2F" + obj;
+
+    }
   }
 
   changeFolder(obj : string){
+
     this.folders = [];
 
     if(obj == '/'){
-      this.currentFolder = this.previousFolder;
-      this.previousFolder = this.rootFolder;
       this.isImage = false;
       this.isVideo = false;
       this.isPDF = false;
       this.dataIsFull = false;
+      this.goBack()
+      if (this.currentFolder == ''){
+        return
+      }
     }
+
     else{
-      this.previousFolder = this.currentFolder;
-      this.currentFolder = this.currentFolder + "%2F" + obj;
       this.isImage = false;
       this.isVideo = false;
       this.isPDF = false;
       this.dataIsFull = false;
+      this.next(obj)
     }
-    let test = this.currentFolder
-    if(obj.includes('/') && obj.length > 1){
-      test = obj.replaceAll('/', '%2F')
-    }
-    this.fileService.getFolders(test)
+
+
+    console.log(this.currentFolder,  "  current")
+    this.fileService.getFolders(this.currentFolder)
     .subscribe(
       (folders: any) => {
         this.folders = folders['files'];
-        if (this.rootFolder == this.currentFolder){
-          this.getShared()
-        }
-
         console.log(this.folders);
         // Further actions with the folders
       },
@@ -187,5 +209,27 @@ export class HomeComponent implements OnInit{
     this.tempData.name = event.target.value;
   }
 
+  changePage(page : string){
+    this.folders = []
+    this.page = page;
+    if (page == 'shared'){
+      this.currentFolder = ""
+      this.previousFolder = this.currentFolder;
+      this.getShared()
+    }
+    else{
+      this.currentFolder = this.rootFolder;
+      this.previousFolder = this.currentFolder;
+      this.getFolders()
 
+    }
+    console.log(this.rootFolder)
+    console.log(this.currentFolder)
+
+
+  }
+
+  logout(){
+    this.router.navigate(['/']);
+  }
 }
