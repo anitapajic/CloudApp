@@ -2,6 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { FileService } from '../services/file.service';
 import { CognitoService } from '../services/cognito.service';
 import { newIUser } from '../model/User';
+import { DomSanitizer, SafeResourceUrl  } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -9,9 +10,6 @@ import { newIUser } from '../model/User';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit{
-
-  @ViewChild('pictureModal', { static: false }) pictureModal!: ElementRef;
-  @ViewChild('pictureDisplay', { static: false }) pictureDisplay!: ElementRef;
 
   isActiveDash:boolean =true;
   isActiveFolder:boolean =false;
@@ -22,8 +20,9 @@ export class HomeComponent implements OnInit{
   rootFolder!: string;
   sharedFolders : string[] = [];
   pictureData: any;
+  myImage! : SafeResourceUrl ;
 
-  constructor(private fileService: FileService, private cognito: CognitoService) { }
+  constructor(private fileService: FileService, private cognito: CognitoService, private sanitizer: DomSanitizer) { }
   ngOnInit(): void {
 
 
@@ -118,19 +117,18 @@ export class HomeComponent implements OnInit{
     );
   }
 
-  openPicture(){
-    this.fileService.getPictureData().subscribe(
+  openPicture(pictureName : string) {
+    this.fileService.getPictureData(this.currentFolder + "%2F" + pictureName).subscribe(
       (response) => {
-        console.log(response);
-        const imageUrl = URL.createObjectURL(response);
-        this.pictureDisplay.nativeElement.src = imageUrl;
-        console.log(imageUrl);
-        this.pictureModal.nativeElement.style.display = 'block';
+        let encodedFile = response['file']
+        console.log(encodedFile)
+        this.myImage = 'data:image/jpeg;base64,' + encodedFile;
       },
       (error) => {
-        console.error(error);
+        console.error('Error getting picture data:', error);
       }
     );
   }
+
 
 }

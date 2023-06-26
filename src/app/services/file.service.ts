@@ -150,8 +150,8 @@ export class FileService {
 
 
 
-  getPictureData() : Observable<any> {
-    return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/tim19-bucket/tamara@gmail.com/photos/atrakcije-agent.png', { responseType: 'blob' })
+  getPictureData(sufix : string) : Observable<any> {
+    return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/files/' + sufix)
 
   }
 
