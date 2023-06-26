@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit{
   isActiveDash:boolean =true;
   isActiveFolder:boolean =false;
   isActiveFav:boolean =false;
-  
+
   rootFolder!: string;
 
   previousFolder!: string;
@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit{
     this.currentFolder = this.previousFolder;
     if (this.currentFolder == ''){
       this.getShared();
-      return 
+      return
     }
     let index = this.previousFolder.lastIndexOf("%2F")
     this.previousFolder = this.previousFolder.substring(0 , index);
@@ -196,6 +196,10 @@ export class HomeComponent implements OnInit{
       this.fileService.updateFile(this.data);
     }
   }
+  cancelEdit() {
+    this.isEditMode = false;
+    this.tempData = JSON.parse(JSON.stringify(this.data));
+  }
 
   updateDescription(event:any) {
     this.tempData.description = event.target.value;
@@ -227,5 +231,22 @@ export class HomeComponent implements OnInit{
 
   logout(){
     this.router.navigate(['/']);
+  }
+
+  delete(name : string) {
+    this.fileService.deleteFile(this.currentFolder + "%2F" + name).subscribe(
+      (response) => {
+        console.log(response);
+        alert("File is successfully deleted.")
+        this.getFolders();
+        this.isImage = false;
+        this.isVideo = false;
+        this.isPDF = false;
+        this.dataIsFull = false;
+      },
+      (error) => {
+        console.error('Error deleting file:', error);
+      }
+    );
   }
 }
