@@ -52,7 +52,7 @@
                       <div class="folder-div2" >
                         <div class="folder-div" *ngIf="createNew">
                           <input type="text" class="folder-input" placeholder="New folder name" (input)="updateFolderName($event)" id="new-folder">
-                          <div style="width: 100%;">
+                          <div style="width: 100%; margin-left: 50px;">
                             <button (click)="createNewFolder()" class="btn">Create</button>
                           </div>
                         </div>
@@ -62,7 +62,7 @@
                       <div class="folder-div2">
                       <div class="folder-div" *ngIf="creteNewInvitation">
                         <input type="text" class="folder-input" placeholder="Family member email" (input)="updateInvitationName($event)" id="new-folder">
-                        <div style="width: 100%;">
+                        <div style="width: 100%; margin-left: 50px;">
                           <button (click)="sendInvitation()" class="btn">Send</button>
                         </div>
                       </div>
