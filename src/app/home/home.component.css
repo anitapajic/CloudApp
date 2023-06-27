@@ -81,14 +81,7 @@ body {
     margin-right: 55px;
     margin-bottom: 40px;
   }
-.button-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  padding: 10px;
-}
+
   .btn{
     display: inline-block;
     clear: both;
