@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit{
     this.dataIsFull = false;
 
     this.fileService.setHomeComponent(this)
-    
+
     this.cognito.getUser().then((user)=>{
       this.currentFolder = user.attributes['email'];
       this.rootFolder = this.currentFolder;
@@ -112,17 +112,17 @@ export class HomeComponent implements OnInit{
 
     }
   }
-  
+
   checkAndChangeFolder(event : any, obj: string) {
     const clickedElement = event.target as HTMLElement;
     console.log(clickedElement)
     const isLastTdClicked = clickedElement.id === 'delete';
-  
+
     if (!isLastTdClicked) {
       this.changeFolder(obj);
     }
   }
-  
+
 
   changeFolder(obj : string){
 
@@ -186,9 +186,12 @@ export class HomeComponent implements OnInit{
     );
   }
   toggleEditMode() {
+    console.log("aaaa");
+    console.log(this.isEditMode);
     this.isEditMode = !this.isEditMode;
     if (this.isEditMode) {
       this.tempData = JSON.parse(JSON.stringify(this.data));
+      console.log("aaaa")
     } else {
       this.data.name = this.tempData.name;
       this.data.description = this.tempData.description;
