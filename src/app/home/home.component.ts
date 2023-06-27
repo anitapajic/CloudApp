@@ -48,6 +48,7 @@ export class HomeComponent implements OnInit{
     this.dataIsFull = false;
 
     this.fileService.setHomeComponent(this)
+    
     this.cognito.getUser().then((user)=>{
       this.currentFolder = user.attributes['email'];
       this.rootFolder = this.currentFolder;

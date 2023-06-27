@@ -27,10 +27,12 @@ export class FileService {
     await this.cognito.getUser().then((value: any) => {
       file.username = value.attributes.email;
     })
-    var typeFolder = this.findFolder(file.type.split('/')[0]);
 
-    var fileDir = file.username + '/' + typeFolder + '/' + file.name
+    var typeFolder = this.findFolder(file.username, file.type.split('/')[0]);
 
+    var fileDir =  typeFolder + '/' + file.name
+
+    console.log(fileDir, " filedir")
     file.id = fileDir
 
     const reader = new FileReader();
@@ -49,15 +51,21 @@ export class FileService {
 
   }
 
-  findFolder(type: string) {
+  findFolder(username: string, type: string) {
+    let currentFolder = this.homeComponent?.currentFolder;
+    let rootFolder = this.homeComponent?.rootFolder;
+
+    if(currentFolder != rootFolder){
+      return currentFolder?.replaceAll("%2F", '/');
+    }
     if(type=='image')
-      return 'photos';
+      return username + '/' + 'photos';
     else if(type == 'video')
-      return 'videos'
+      return username + '/' + 'videos'
     else if(type == 'application')
-      return 'documents'
+      return username + '/' + 'documents'
     else
-      return 'other'
+      return username + '/' + 'other'
   }
 
   setHomeComponent(home : HomeComponent){
