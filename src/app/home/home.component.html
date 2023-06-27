@@ -41,21 +41,32 @@
                 <div  class="left-column">
                 <div class="albums">
                     <!-- <div class="mainTitle">Create new folder</div> -->
-                    <div class="card card-with-shadow">
+                    <div class="card card-with-shadow" style="width: 250px;" (click)="newFolderName()">
                         <div class="card-icon">
                           <i class="fas fa-image"></i>
                         </div>
                         <div class="card-content">
-                          <h3 class="card-title" (click)="newFolderName()">Create new folder</h3>
+                          <h3 class="card-title" >Create new folder</h3>
                         </div>
                       </div>
-                      <div class="folder-div" *ngIf="createNew">
-                        <input type="text" class="folder-input" placeholder="New folder name" (input)="updateFolderName($event)" id="new-folder">
-                        <div style="width: 100%;">
-                          <button (click)="createNewFolder()" class="btn">Create</button>
+                      <div class="folder-div2" >
+                        <div class="folder-div" *ngIf="createNew">
+                          <input type="text" class="folder-input" placeholder="New folder name" (input)="updateFolderName($event)" id="new-folder">
+                          <div style="width: 100%; margin-left: 50px;">
+                            <button (click)="createNewFolder()" class="btn">Create</button>
+                          </div>
+                        </div>
+             
+                      </div>
 
+                      <div class="folder-div2">
+                      <div class="folder-div" *ngIf="creteNewInvitation">
+                        <input type="text" class="folder-input" placeholder="Family member email" (input)="updateInvitationName($event)" id="new-folder">
+                        <div style="width: 100%; margin-left: 50px;">
+                          <button (click)="sendInvitation()" class="btn">Send</button>
                         </div>
                       </div>
+                    </div>
 
                 </div>
 
@@ -138,12 +149,28 @@
                   </div>
                 </div>
                 <div class="right-column">
-                <div class="upload">
-                    <div class="upload-title">Upload</div>
-                    <div class="upload-content">
-                        <app-upload-file></app-upload-file>
+
+                  <div class="invitation">
+                    <div class="card card-with-shadow"  (click)="invite()">
+                        <div class="card-icon">
+                          <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="card-content">
+                          <h3 class="card-title" >Invite family member</h3>
+                        </div>
                       </div>
+        
+
                 </div>
+                    <div class="upload">
+                        <div class="upload-title">Upload</div>
+                        <div class="upload-content">
+                            <app-upload-file></app-upload-file>
+                        </div>
+                    </div>
+
+
+                
                 </div>
             </div>
         </div>
