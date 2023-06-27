@@ -45,13 +45,13 @@
             <div class="context">
                 <div  class="left-column">
                 <div class="albums">
-                    <div class="mainTitle">Albums</div>
+                    <!-- <div class="mainTitle">Create new folder</div> -->
                     <div class="card card-with-shadow">
                         <div class="card-icon">
                           <i class="fas fa-image"></i>
                         </div>
                         <div class="card-content">
-                          <h3 class="card-title">Album Name</h3>
+                          <h3 class="card-title">Create new folder</h3>
                         </div>
                       </div>
 
@@ -84,6 +84,7 @@
                       </table>
 
                 </div>
+
                   <div class="fileDataDiv">
                     <div *ngIf="isImage" class="imageDiv">
                       <img style="width: 300px" [src]="myImage" />
@@ -107,9 +108,11 @@
                       <p>Name:
                         <input type="text" [value]="isEditMode ? tempData.name : data.name" (input)="updateName($event)" [disabled]="!isEditMode">
                       </p><p>Type: {{ data.type }}</p>
+
                       <button (click)="toggleEditMode()">{{ isEditMode ? 'Save' : 'Edit' }}</button>
                       <button *ngIf="!isEditMode" (click)="delete(data.name)">Delete</button>
                       <button *ngIf="isEditMode" (click)="cancelEdit()">Cancel</button>
+
                     </div>
                   </div>
                 </div>
@@ -160,20 +163,27 @@
 
               </div>
                 <div class="fileDataDiv">
-                  <div *ngIf="myImage" class="imageDiv">
-                    <img style="width: 300px" [src]="myImage" />
+                    <div *ngIf="isImage" class="imageDiv">
+                      <img style="width: 300px" [src]="myImage" />
+                    </div>
+                    <div *ngIf="isVideo">
+                      <video controls>
+                        <source [src]="myVideo" type="video/mp4">
+                      </video>
+                    </div>
+                    <div *ngIf="isPDF">
+                      <object style="width: 300px" [attr.data]="myPDF " type="application/pdf" ></object>
+                    </div>
+                    <div *ngIf="dataIsFull" class="metaDataDiv">
+                      <p>Size: {{ data.size }}</p>
+                      <p>Date Modified: {{data.date_modified}}</p>
+                      <p>Date Uploaded: {{data.date_uploaded}}</p>
+                      <p>Owner: {{ data.username }}</p>
+                      <p>Description:  {{data.description}} </p>
+                      <p>Name: {{data.name}}</p>
+                      <p>Type: {{ data.type }}</p>
+                    </div>
                   </div>
-                  <div *ngIf="data" class="metaDataDiv">
-                    <p>Size: {{data.size}}</p>
-                    <p>Date Modified: <input type="text" [(ngModel)]="data.date_modified" [disabled]="!isEditMode"></p>
-                    <p>Date Uploaded: <input type="text" [(ngModel)]="data.date_uploaded" [disabled]="!isEditMode"></p>
-                    <p>Owner: {{data.username}}</p>
-                    <p>Description: <input type="text" [(ngModel)]="data.description" [disabled]="!isEditMode"></p>
-                    <p>Name: <input type="text" [(ngModel)]="data.name" [disabled]="!isEditMode"></p>
-                    <p>Type: {{data.type}}</p>
-                    <button (click)="toggleEditMode()">{{ isEditMode ? 'Save' : 'Edit' }}</button>
-                  </div>
-                </div>
               </div>
               <!-- <div class="right-column">
               <div class="upload">

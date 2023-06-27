@@ -124,12 +124,9 @@ export class HomeComponent implements OnInit{
   changeFolder(obj : string){
 
     this.folders = [];
-
+    this.removeFile()
     if(obj == '/'){
-      this.isImage = false;
-      this.isVideo = false;
-      this.isPDF = false;
-      this.dataIsFull = false;
+
       this.goBack()
       if (this.currentFolder == ''){
         return
@@ -137,10 +134,7 @@ export class HomeComponent implements OnInit{
     }
 
     else{
-      this.isImage = false;
-      this.isVideo = false;
-      this.isPDF = false;
-      this.dataIsFull = false;
+   
       this.next(obj)
     }
 
@@ -211,6 +205,7 @@ export class HomeComponent implements OnInit{
 
   changePage(page : string){
     this.folders = []
+    this.removeFile()
     this.page = page;
     if (page == 'shared'){
       this.currentFolder = ""
@@ -233,16 +228,20 @@ export class HomeComponent implements OnInit{
     this.router.navigate(['/']);
   }
 
+  removeFile(){
+    this.isImage = false;
+    this.isVideo = false;
+    this.isPDF = false;
+    this.dataIsFull = false;
+  }
+
   delete(name : string) {
     this.fileService.deleteFile(this.currentFolder + "%2F" + name).subscribe(
       (response) => {
         console.log(response);
         alert("File is successfully deleted.")
         this.getFolders();
-        this.isImage = false;
-        this.isVideo = false;
-        this.isPDF = false;
-        this.dataIsFull = false;
+        this.removeFile();
       },
       (error) => {
         console.error('Error deleting file:', error);
