@@ -24,12 +24,23 @@ def download_object(event, context):
         ExpiresIn=3600  # The URL will be valid for 1 hour
     )
 
-    # Send presigned URL
     body = {
-        'message': 'Generated presigned URL for object {} from bucket {}'.format(path, s3_bucket_name),
         'url': url,
     }
-    return {
+
+    # Send presigned URL
+    response = {
         'statusCode': 200,
-        'body': json.dumps(body)
+        'body': json.dumps(body),
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type',
+         },
     }
+
+    return response
+
+
+

@@ -251,13 +251,20 @@ export class HomeComponent implements OnInit{
   }
 
   download(name:string) {
-    this.fileService.downloadFile(this.currentFolder + "%2F" + name).subscribe(
-      (response) => {
-        console.log("aaaa");
-        console.log(response);
-        console.log(response['body']);
+        this.fileService.downloadFile(this.currentFolder + "%2F" + name).subscribe(
+          (response) => {
+            let presignedUrl = response['url'];
+            console.log(presignedUrl);
 
-      }
-    );
+            let a = document.createElement('a');
+            a.href = presignedUrl;
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          },
+          (error) => {
+            console.log('Error downloading file:', error);
+          });
   }
 }
