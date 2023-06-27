@@ -188,29 +188,43 @@
                     </table>
 
               </div>
-                <div class="fileDataDiv">
-                    <div *ngIf="isImage" class="imageDiv">
-                      <img style="width: 300px" [src]="myImage" />
-                    </div>
-                    <div *ngIf="isVideo">
-                      <video controls>
-                        <source [src]="myVideo" type="video/mp4">
-                      </video>
-                    </div>
-                    <div *ngIf="isPDF">
-                      <object style="width: 300px" [attr.data]="myPDF " type="application/pdf" ></object>
-                    </div>
-                    <div *ngIf="dataIsFull" class="metaDataDiv">
-                      <p>Size: {{ data.size }}</p>
-                      <p>Date Modified: {{data.date_modified}}</p>
-                      <p>Date Uploaded: {{data.date_uploaded}}</p>
-                      <p>Owner: {{ data.username }}</p>
-                      <p>Description:  {{data.description}} </p>
-                      <p>Name: {{data.name}}</p>
-                      <p>Type: {{ data.type }}</p>
-                    </div>
-                  </div>
+              <div class="fileDataDiv">
+                <div *ngIf="isImage" class="imageDiv">
+                  <img style="width: 300px" [src]="myImage" />
+                </div>
+                <div *ngIf="isVideo">
+                  <video controls>
+                    <source [src]="myVideo" type="video/mp4">
+                  </video>
+                </div>
+                <div *ngIf="isPDF">
+                  <object style="width: 300px" [attr.data]="myPDF " type="application/pdf" ></object>
+                </div>
+                <div *ngIf="isTXT">
+                  <pre>{{ myTXT }}</pre>
+                </div>
+                <div *ngIf="isDocs">
+                  <iframe [src]="urlToDocs" width='100%' height="500px" frameborder='0' scrolling="yes"></iframe>
+                </div>
+                <div *ngIf="dataIsFull" class="metaDataDiv">
+                  <p id="size">Size: {{ data.size }}</p>
+                  <p id="date1">Date Modified: {{data.date_modified}}</p>
+                  <p id="date2">Date Uploaded: {{data.date_uploaded}}</p>
+                  <p id="owner">Owner: {{ data.username }}</p>
+                  <p id="description">Description: {{data.description}}</p>
+                  <p id="name">Name: {{data.name}}</p>
+                  <p id="type">Type: {{ data.type }}</p>
+                  <button class="btn btn-primary">
+                    <span class="button-icon">
+                      <i class="fas  fa-download ic"></i>
+                    </span>
+                    <span (click)="download(data.name)">Download</span>
+                  </button>
+                </div>
               </div>
+              </div>
+
+     
               <!-- <div class="right-column">
               <div class="upload">
                   <div class="upload-title">Upload</div>

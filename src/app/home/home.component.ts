@@ -236,6 +236,8 @@ export class HomeComponent implements OnInit{
     this.isVideo = false;
     this.isPDF = false;
     this.dataIsFull = false;
+    this.isTXT = false;
+    this.isDocs = false;
   }
 
   delete(name : string) {
