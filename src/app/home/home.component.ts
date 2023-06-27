@@ -26,6 +26,9 @@ export class HomeComponent implements OnInit{
   newFolder : string = "";
   createNew : boolean = false;
 
+  newInvitation : string = "";
+  creteNewInvitation : boolean = false;
+
   myImage! : SafeResourceUrl ;
   myVideo! : SafeResourceUrl ;
   myPDF! : SafeResourceUrl ;
@@ -352,5 +355,40 @@ export class HomeComponent implements OnInit{
           });
   }
 
+  updateInvitationName(event:any) {
+    this.newInvitation = event.target.value;
+  }
+  invite(){
+    this.creteNewInvitation = !this.creteNewInvitation;
+  }
+
+  sendInvitation(){
+    let id = Math.floor(Math.random() * 9000) + 1000;
+
+    let body = {
+      'id' : id.toString() ,
+      'username' : this.rootFolder
+    }
+    console.log(body)
+    this.cognito.createInvitation(body).subscribe(
+      (response) => {
+        console.log(response);
+        let data = {
+          "subject" : "Family invitation",
+          "content" :  "You received family invitation from " + this.rootFolder + " to make account on Clouding. Here is your registration code: " + id + ".",
+        }
+        this.fileService.sendNotification(data).subscribe(
+          (response) => {
+            console.log(response);
+          },(error) => {
+            console.error(error);
+          }
+        )
+      },
+      (error) => {
+        console.error(error);
+      }
+    )
+  }
   
 }

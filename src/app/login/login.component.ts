@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit{
       password: new FormControl(''),
       name: new FormControl(''),
       family_name : new FormControl(''),
+      registration_code : new FormControl(''),
       code: new FormControl('')
     });
   }
@@ -45,11 +46,25 @@ export class LoginComponent implements OnInit{
         family_name : user.family_name,
         username : user.username,
         password : user.password,
-        folders : ['bucket-tim19/'+ user.username]
+        folders : []
     }
-    this.cognitoService.uploadUser(newUser);
 
+    if(user.registration_code.length == 4){
+      this.cognitoService.getInvitation(user.registration_code).subscribe(
+        (response: any) => {
+          console.log(response['data']['username'], "   username u loginu")
+          newUser.folders.push(response['data']['username']);
+          this.cognitoService.uploadUser(newUser);
 
+          },
+        (error: any) => {
+          console.error(error);
+        }
+      )
+    }
+    else{
+      this.cognitoService.uploadUser(newUser);
+    }
 
     }).catch((error) =>{
         alert(error)

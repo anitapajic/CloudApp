@@ -36,6 +36,18 @@ provider:
 
     - Effect: Allow
       Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "Fn::GetAtt": [ inviteTable, Arn ]
+
+    - Effect: Allow
+      Action:
         - ses:SendEmail
         - ses:SendRawEmail
       Resource: "*"
@@ -208,6 +220,31 @@ functions:
               paths:
                 username: true
 
+  createInvitation:
+    handler: createInvitation/create_invitation.create
+    package:
+      include: 'createInvitation/**'
+    events:
+      - http:
+          path: invitation
+          method: post
+          cors: true
+
+
+  getInvitation:
+    handler: getInvitation/get_invitation.get_one
+    package:
+      include: 'getInvitation/**'
+    events:
+      - http:
+          path: invitation/{id}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true              
+
   sendSMS:
     handler: sendNotification/send.send_sms
     package:
@@ -248,4 +285,16 @@ resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
-
+    inviteTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+          TableName: inviteTable
+          AttributeDefinitions:
+            - AttributeName: id
+              AttributeType: S
+          KeySchema:
+            - AttributeName: id
+              KeyType: HASH
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1

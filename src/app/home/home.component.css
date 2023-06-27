@@ -114,16 +114,23 @@ body {
 
   .folder-div{
     padding-left: 40px;
-    margin-left: 50px; 
     background-color: white; 
     border-radius: .2rem;
     width: 220px;
     height: 126px;
   }
 
-  .card {
+  .folder-div2{
+    margin-left: 40px; 
+    margin-right: 40px;
+    border-radius: .2rem;
     width: 220px;
-    height: 80px;
+    height: 126px;
+  }
+
+
+  .card {
+    height: 85px;
     background-color: #0f555b;
     border-radius: 5px;
     padding: 20px;
@@ -170,6 +177,9 @@ body {
   .albums{
     margin-bottom: 40px;
     display: flex;
+  }
+  .invitation{
+    margin-bottom: 40px;
   }
 
 

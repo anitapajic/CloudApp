@@ -67,6 +67,14 @@ export class CognitoService {
      return this.http.get(this.s3_path + '/' + username )
   }
 
+  getInvitation(id : string){
+    return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/invitation/' + id)
+  }
+
+  createInvitation(data : any){
+    return this.http.post('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/invitation', data)
+  }
+
 
 
 }

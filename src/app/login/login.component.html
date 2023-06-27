@@ -6,7 +6,8 @@
 			<input placeholder="First name"  formControlName="name"/>
 			<input placeholder="Last name"  formControlName="family_name"/>
 			<input type="password" placeholder="Password" *ngIf="!isCreated" formControlName="password"/>
-			<input placeholder="Code" *ngIf="isCreated" formControlName="code"/>
+			<input placeholder="Registration code" *ngIf="!isCreated" formControlName="registration_code"/>
+			<input placeholder="Verification code" *ngIf="isCreated" formControlName="code"/>
 
 			<button *ngIf="!isCreated" (click)="signUp()">Sign Up</button>
 			<button *ngIf="isCreated" (click)="verify()">Verify</button>
