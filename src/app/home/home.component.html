@@ -96,6 +96,12 @@
                     <div *ngIf="isPDF">
                       <object style="width: 300px" [attr.data]="myPDF " type="application/pdf" ></object>
                     </div>
+                    <div *ngIf="isTXT">
+                      <pre>{{ myTXT }}</pre>
+                    </div>
+                    <div *ngIf="isDocs">
+                      <iframe [src]="urlToDocs" width='100%' height="500px" frameborder='0' scrolling="yes"></iframe>
+                    </div>
                     <div *ngIf="dataIsFull" class="metaDataDiv">
                       <p id="size">Size: {{ data.size }}</p>
                       <p id="date1">Date Modified: {{data.date_modified}}</p>
