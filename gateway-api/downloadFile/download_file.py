@@ -18,12 +18,18 @@ def download_object(event, context):
     s3 = boto3.client('s3')
 
     # Generate presigned URL for the S3 object
-    response = s3.get_object(Bucket=s3_bucket_name, Key=path)
-    url = s3.generate_presigned_url(response,ExpiresIn=3600)
+    url = s3.generate_presigned_url(
+        'get_object',
+        Params={'Bucket': s3_bucket_name, 'Key': path},
+        ExpiresIn=3600  # The URL will be valid for 1 hour
+    )
 
     # Send presigned URL
     body = {
-        'file': response,
+        'message': 'Generated presigned URL for object {} from bucket {}'.format(path, s3_bucket_name),
         'url': url,
     }
-    return create_response(200, body)
+    return {
+        'statusCode': 200,
+        'body': json.dumps(body)
+    }
