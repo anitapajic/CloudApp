@@ -116,4 +116,8 @@ export class FileService {
     return this.http.delete('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/files/' + sufix)
   }
 
+  downloadFile(sufix : string) : Observable<any>{
+    return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/download/' + sufix)
+  }
+
 }

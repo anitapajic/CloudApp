@@ -139,6 +139,21 @@ functions:
               paths:
                 id: true
 
+  downloadFile:
+    handler: downloadFile/download_file.download_object
+    package:
+      include: 'downloadFile/**'
+    events:
+      - http:
+          path: download/{id}
+          method: get
+          cors: true
+          # Specifying path parameters
+          request:
+            parameters:
+              paths:
+                id: true
+
   getBucket:
     handler: getBucket/get_bucket.get_one
     package:

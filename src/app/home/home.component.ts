@@ -294,5 +294,14 @@ export class HomeComponent implements OnInit{
 
     console.log(this.currentFolder.replaceAll('%2F', '/') + '/' +folder)
     
+  download(name:string) {
+    this.fileService.downloadFile(this.currentFolder + "%2F" + name).subscribe(
+      (response) => {
+        console.log("aaaa");
+        console.log(response);
+        console.log(response['body']);
+
+      }
+    );
   }
 }

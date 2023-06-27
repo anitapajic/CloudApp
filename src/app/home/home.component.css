@@ -242,3 +242,27 @@ body {
   .metaDataDiv{
     margin-top: 30px;
   }
+.btn {
+  display: inline-block;
+  clear: both;
+  font-family: inherit;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: initial;
+  border: none;
+  border-radius: .2rem;
+  outline: none;
+  padding: 0 1rem;
+  height: 36px;
+  margin-right: 10px;
+  margin-top: 20px;
+  line-height: 36px;
+  color: #fff;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+  background: #0f555b;
+  border-color: #0f555b;
+  cursor: pointer;
+}
+
+
