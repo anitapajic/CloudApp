@@ -97,19 +97,26 @@
                       <object style="width: 300px" [attr.data]="myPDF " type="application/pdf" ></object>
                     </div>
                     <div *ngIf="dataIsFull" class="metaDataDiv">
-                      <p>Size: {{ data.size }}</p>
-                      <p>Date Modified: {{data.date_modified}}</p>
-                      <p>Date Uploaded: {{data.date_uploaded}}</p>
-                      <p>Owner: {{ data.username }}</p>
-                      <p>Description:
+                      <p id="size">Size: {{ data.size }}</p>
+                      <p id="date1">Date Modified: {{data.date_modified}}</p>
+                      <p id="date2">Date Uploaded: {{data.date_uploaded}}</p>
+                      <p id="owner">Owner: {{ data.username }}</p>
+                      <p id="description">Description:
                         <input type="text" [value]="isEditMode ? tempData.description : data.description" (input)="updateDescription($event)" [disabled]="!isEditMode">
                       </p>
-                      <p>Name:
+                      <p id="name">Name:
                         <input type="text" [value]="isEditMode ? tempData.name : data.name" (input)="updateName($event)" [disabled]="!isEditMode">
-                      </p><p>Type: {{ data.type }}</p>
-                      <button (click)="toggleEditMode()">{{ isEditMode ? 'Save' : 'Edit' }}</button>
-                      <button *ngIf="!isEditMode" (click)="delete(data.name)">Delete</button>
-                      <button *ngIf="isEditMode" (click)="cancelEdit()">Cancel</button>
+                      </p>
+                      <p id="type">Type: {{ data.type }}</p>
+                      <button class="btn btn-primary" (click)="toggleEditMode()">{{ isEditMode ? 'Save' : 'Edit' }}</button>
+                      <button class="btn btn-primary" *ngIf="!isEditMode" (click)="delete(data.name)">Delete</button>
+                      <button class="btn btn-primary" *ngIf="!isEditMode" >
+                        <span class="button-icon">
+                          <i class="fas  fa-download ic"></i>
+                        </span>
+                        <span (click)="download(data.name)">Download</span>
+                      </button>
+                      <button class="btn btn-primary" *ngIf="isEditMode" (click)="cancelEdit()">Cancel</button>
                     </div>
                   </div>
                 </div>

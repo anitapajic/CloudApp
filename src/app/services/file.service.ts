@@ -133,7 +133,7 @@ export class FileService {
   }
 
   getFolders(prefix: string): Observable<string[]> {
-    return this.http.get<string[]>(this.meta + 'bucket/' + prefix);
+    return this.http.get<string[]>(this.meta + 'folder/' + prefix);
   }
 
 
@@ -170,5 +170,10 @@ export class FileService {
   deleteFile(sufix : string) : Observable<any> {
     return this.http.delete('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/files/' + sufix)
   }
+
+  downloadFile(sufix : string) : Observable<any>{
+    return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/download/' + sufix)
+  }
+
 
 }
