@@ -51,7 +51,14 @@
                           <i class="fas fa-image"></i>
                         </div>
                         <div class="card-content">
-                          <h3 class="card-title">Create new folder</h3>
+                          <h3 class="card-title" (click)="newFolderName()">Create new folder</h3>
+                        </div>
+                      </div>
+                      <div class="folder-div" *ngIf="createNew">
+                        <input type="text" class="folder-input" placeholder="New folder name" (input)="updateFolderName($event)" id="new-folder">
+                        <div style="width: 100%;">
+                          <button (click)="createNewFolder()" class="btn">Create</button>
+
                         </div>
                       </div>
 
@@ -64,21 +71,29 @@
                           <tr>
                             <th>Name</th>
                             <th>Type</th>
-                            <th>Size</th>
+                            <th>Delete</th>
                           </tr>
                         </thead>
                         <tr (click)="changeFolder('/')" *ngIf="rootFolder != currentFolder">
                           <td><i class="fas fa-folder" ></i>/</td>
                           <td>Folder</td>
-                          <td>-</td>
+                          <td>
+                            <i style="margin-left: 15px;">-</i>
+
+                          </td>
                         </tr>
                         <tbody *ngFor="let obj of folders">
-                        <tr (click)="isFile(obj) ? openPicture(obj) : changeFolder(obj)" *ngIf="obj.length > 1">
+                        <tr (click)="isFile(obj) ? openPicture(obj) : checkAndChangeFolder($event, obj)" *ngIf="obj.length > 1">
                           <td>
                             <i [class]="isFile(obj) ? 'fas fa-file' : 'fas fa-folder'"></i>{{ obj }}
                           </td>
                           <td>{{ isFile(obj) ? 'File' : 'Folder' }}</td>
-                          <td>-</td>
+                          
+                          <td (click)="deleteFolder(obj)" style="z-index: 9999;" >
+                            <i *ngIf="!isFile(obj)" style="margin-left: 15px" [class]="'fas fa-trash'" id="delete"></i>
+                            <i *ngIf="isFile(obj)" style="margin-left: 15px;">-</i>
+
+                          </td>
                         </tr>
                         </tbody>
                       </table>

@@ -102,6 +102,12 @@ export class FileService {
     return this.http.get<string[]>(this.meta + 'bucket/' + prefix);
   }
 
+  createNewFolder(id : any) : Observable<any>{
+    console.log(id, "  id")
+
+    return this.http.post(this.meta + 'folder', id);
+  }
+
   getPictureData(sufix : string) : Observable<any> {
     return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/files/' + sufix)
   }

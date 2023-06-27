@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+// import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+// import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 
@@ -13,15 +13,15 @@ export class NewFolderComponent {
 
   myForm!: FormGroup;
 
-  constructor(
-    public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Request, private formBuilder: FormBuilder
-  ) {
+  // constructor(
+  //   public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
+  //   @Inject(MAT_DIALOG_DATA) public data: Request, private formBuilder: FormBuilder
+  // ) {
 
-    this.myForm = this.formBuilder.group({
+  //   this.myForm = this.formBuilder.group({
    
-    });
-   }
+  //   });
+  //  }
 
 
 }

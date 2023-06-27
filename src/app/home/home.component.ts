@@ -24,7 +24,8 @@ export class HomeComponent implements OnInit{
   folders : string[] = [];
   sharedFolders : string[] = [];
 
-
+  newFolder : string = "";
+  createNew : boolean = false;
 
   myImage! : SafeResourceUrl ;
   myVideo! : SafeResourceUrl ;
@@ -109,10 +110,8 @@ export class HomeComponent implements OnInit{
   }
 
   next(obj : string){
-    console.log('obj  ', obj)
     this.previousFolder = this.currentFolder;
     if (this.currentFolder == ""){
-      console.log(obj)
       this.currentFolder = obj.replace('/', '%2F');
 
     }else{
@@ -120,31 +119,37 @@ export class HomeComponent implements OnInit{
 
     }
   }
+  
+  checkAndChangeFolder(event : any, obj: string) {
+    const clickedElement = event.target as HTMLElement;
+    console.log(clickedElement)
+    const isLastTdClicked = clickedElement.id === 'delete';
+  
+    if (!isLastTdClicked) {
+      this.changeFolder(obj);
+    }
+  }
+  
 
   changeFolder(obj : string){
 
     this.folders = [];
     this.removeFile()
     if(obj == '/'){
-
       this.goBack()
       if (this.currentFolder == ''){
         return
       }
     }
-
     else{
-   
       this.next(obj)
     }
 
 
-    console.log(this.currentFolder,  "  current")
     this.fileService.getFolders(this.currentFolder)
     .subscribe(
       (folders: any) => {
         this.folders = folders['files'];
-        console.log(this.folders);
         // Further actions with the folders
       },
       (error: any) => {
@@ -218,9 +223,6 @@ export class HomeComponent implements OnInit{
       this.getFolders()
 
     }
-    console.log(this.rootFolder)
-    console.log(this.currentFolder)
-
 
   }
 
@@ -247,5 +249,50 @@ export class HomeComponent implements OnInit{
         console.error('Error deleting file:', error);
       }
     );
+  }
+
+  newFolderName(){
+    this.createNew = !this.createNew;
+  }
+  updateFolderName(event:any) {
+    this.newFolder = event.target.value;
+  }
+
+  createNewFolder(){
+    if(this.folders.includes(this.newFolder)){
+      alert("Folder already exist")
+      return
+    }
+    if(this.newFolder.length < 1){
+      alert("Enter folder name")
+      return
+    }
+    if(this.newFolder.includes('/')){
+      alert("Folder name can't include / ")
+      return
+    }
+
+    let body = {
+      'id' : this.currentFolder.replaceAll('%2F', '/') + '/' + this.newFolder
+    }
+    console.log(this.currentFolder, " after")
+    this.fileService.createNewFolder(body).subscribe(
+      (response) => {
+        console.log(response);
+        this.getFolders();
+        this.newFolderName()
+      },
+      (error) => {
+        console.error('Error creating folder:', error);
+      }
+    )
+
+  }
+
+
+  deleteFolder(folder : string){
+
+    console.log(this.currentFolder.replaceAll('%2F', '/') + '/' +folder)
+    
   }
 }
