@@ -7,22 +7,22 @@
 
 
       <button class="menu-button" >
-        <span class="button-icon">
+        <span class="button-icon" [class.clicked]="page === 'dashboard'">
           <i class="fas fa-chart-line ic" ></i>
         </span>
-        <span class="button-text" (click)="changePage('dashboard')" >Dashboard</span>
+        <span class="button-text" [class.clicked]="page === 'dashboard'" (click)="changePage('dashboard')" >Dashboard</span>
       </button>
-      <button class="menu-button" >
+      <button class="menu-button" [class.clicked]="page === 'main'">
+        <span class="button-icon">
+          <i class="fas  fa-folder ic" ></i>
+        </span>
+        <span class="button-text" [class.clicked]="page === 'main'" (click)="changePage('main')" >My Folder</span>
+      </button>
+        <button class="menu-button" [class.clicked]="page === 'shared'">
         <span class="button-icon">
           <i class="fas  fa-folder ic"></i>
         </span>
-        <span class="button-text" (click)="changePage('main')" >My Folder</span>
-      </button>
-        <button class="menu-button">
-        <span class="button-icon">
-          <i class="fas  fa-folder ic"></i>
-        </span>
-          <span class="button-text" (click)="changePage('shared')">Shared folders</span>
+          <span class="button-text" [class.clicked]="page === 'shared'" (click)="changePage('shared')">Shared folders</span>
         </button>
 
       <button class="menu-button" >
@@ -45,13 +45,20 @@
             <div class="context">
                 <div  class="left-column">
                 <div class="albums">
-                    <div class="mainTitle">Albums</div>
+                    <!-- <div class="mainTitle">Create new folder</div> -->
                     <div class="card card-with-shadow">
                         <div class="card-icon">
                           <i class="fas fa-image"></i>
                         </div>
                         <div class="card-content">
-                          <h3 class="card-title">Album Name</h3>
+                          <h3 class="card-title" (click)="newFolderName()">Create new folder</h3>
+                        </div>
+                      </div>
+                      <div class="folder-div" *ngIf="createNew">
+                        <input type="text" class="folder-input" placeholder="New folder name" (input)="updateFolderName($event)" id="new-folder">
+                        <div style="width: 100%;">
+                          <button (click)="createNewFolder()" class="btn">Create</button>
+
                         </div>
                       </div>
 
@@ -64,26 +71,35 @@
                           <tr>
                             <th>Name</th>
                             <th>Type</th>
-                            <th>Size</th>
+                            <th>Delete</th>
                           </tr>
                         </thead>
                         <tr (click)="changeFolder('/')" *ngIf="rootFolder != currentFolder">
                           <td><i class="fas fa-folder" ></i>/</td>
                           <td>Folder</td>
-                          <td>-</td>
+                          <td>
+                            <i style="margin-left: 15px;">-</i>
+
+                          </td>
                         </tr>
                         <tbody *ngFor="let obj of folders">
-                        <tr (click)="isFile(obj) ? openPicture(obj) : changeFolder(obj)" *ngIf="obj.length > 1">
+                        <tr (click)="isFile(obj) ? openPicture(obj) : checkAndChangeFolder($event, obj)" *ngIf="obj.length > 1">
                           <td>
                             <i [class]="isFile(obj) ? 'fas fa-file' : 'fas fa-folder'"></i>{{ obj }}
                           </td>
                           <td>{{ isFile(obj) ? 'File' : 'Folder' }}</td>
-                          <td>-</td>
+                          
+                          <td (click)="deleteFolder(obj)" style="z-index: 9999;" >
+                            <i *ngIf="!isFile(obj)" style="margin-left: 15px" [class]="'fas fa-trash'" id="delete"></i>
+                            <i *ngIf="isFile(obj)" style="margin-left: 15px;">-</i>
+
+                          </td>
                         </tr>
                         </tbody>
                       </table>
 
                 </div>
+
                   <div class="fileDataDiv">
                     <div *ngIf="isImage" class="imageDiv">
                       <img style="width: 300px" [src]="myImage" />
@@ -173,20 +189,27 @@
 
               </div>
                 <div class="fileDataDiv">
-                  <div *ngIf="myImage" class="imageDiv">
-                    <img style="width: 300px" [src]="myImage" />
+                    <div *ngIf="isImage" class="imageDiv">
+                      <img style="width: 300px" [src]="myImage" />
+                    </div>
+                    <div *ngIf="isVideo">
+                      <video controls>
+                        <source [src]="myVideo" type="video/mp4">
+                      </video>
+                    </div>
+                    <div *ngIf="isPDF">
+                      <object style="width: 300px" [attr.data]="myPDF " type="application/pdf" ></object>
+                    </div>
+                    <div *ngIf="dataIsFull" class="metaDataDiv">
+                      <p>Size: {{ data.size }}</p>
+                      <p>Date Modified: {{data.date_modified}}</p>
+                      <p>Date Uploaded: {{data.date_uploaded}}</p>
+                      <p>Owner: {{ data.username }}</p>
+                      <p>Description:  {{data.description}} </p>
+                      <p>Name: {{data.name}}</p>
+                      <p>Type: {{ data.type }}</p>
+                    </div>
                   </div>
-                  <div *ngIf="data" class="metaDataDiv">
-                    <p>Size: {{data.size}}</p>
-                    <p>Date Modified: <input type="text" [(ngModel)]="data.date_modified" [disabled]="!isEditMode"></p>
-                    <p>Date Uploaded: <input type="text" [(ngModel)]="data.date_uploaded" [disabled]="!isEditMode"></p>
-                    <p>Owner: {{data.username}}</p>
-                    <p>Description: <input type="text" [(ngModel)]="data.description" [disabled]="!isEditMode"></p>
-                    <p>Name: <input type="text" [(ngModel)]="data.name" [disabled]="!isEditMode"></p>
-                    <p>Type: {{data.type}}</p>
-                    <button (click)="toggleEditMode()">{{ isEditMode ? 'Save' : 'Edit' }}</button>
-                  </div>
-                </div>
               </div>
               <!-- <div class="right-column">
               <div class="upload">
