@@ -47,6 +47,7 @@ export class HomeComponent implements OnInit{
     this.isPDF = false;
     this.dataIsFull = false;
 
+    this.fileService.setHomeComponent(this)
     this.cognito.getUser().then((user)=>{
       this.currentFolder = user.attributes['email'];
       this.rootFolder = this.currentFolder;
@@ -276,6 +277,7 @@ export class HomeComponent implements OnInit{
       'id' : this.currentFolder.replaceAll('%2F', '/') + '/' + this.newFolder
     }
     console.log(this.currentFolder, " after")
+
     this.fileService.createNewFolder(body).subscribe(
       (response) => {
         console.log(response);
@@ -291,9 +293,21 @@ export class HomeComponent implements OnInit{
 
 
   deleteFolder(folder : string){
+    let data = {
+      'id' : this.currentFolder.replaceAll('%2F', '/') + '/' +folder,
+    }
 
-    console.log(this.currentFolder.replaceAll('%2F', '/') + '/' +folder)
-    
+    this.fileService.deleteFolder(data).subscribe(
+      (response) => {
+        console.log(response);
+        this.getFolders();
+      },
+      (error) => {
+        console.error('Error deleting folder:', error);
+      }
+    )
+  }
+
   download(name:string) {
     this.fileService.downloadFile(this.currentFolder + "%2F" + name).subscribe(
       (response) => {

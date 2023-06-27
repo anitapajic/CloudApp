@@ -5,12 +5,16 @@ import { CognitoService } from './cognito.service';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { JsonPipe } from '@angular/common';
 import { Observable } from 'rxjs';
+import { HomeComponent } from '../home/home.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
   s3_path: string = 'https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/tim19-bucket';
+
+  homeComponent: HomeComponent | null = null;
+
 
   constructor(private cognito: CognitoService, private http:HttpClient) { }
 
@@ -35,11 +39,11 @@ export class FileService {
       var encodedFile = reader.result as string
       encodedFile =  encodedFile.split(',')[1];
       this.uploadFileData(file, encodedFile);
-      if(file.favourite){
-        file.id = file.username + '/favourites/' + file.name
-        this.uploadFileData(file, encodedFile);
+      // if(file.favourite){
+      //   file.id = file.username + '/favourites/' + file.name
+      //   this.uploadFileData(file, encodedFile);
 
-      }
+      // }
 
     }
 
@@ -56,6 +60,9 @@ export class FileService {
       return 'other'
   }
 
+  setHomeComponent(home : HomeComponent){
+    this.homeComponent = home;
+  }
 
 
   uploadFileData(file: IFile, encodedFile : string){
@@ -74,10 +81,11 @@ export class FileService {
       file : encodedFile
     }
 
-    console.log(meta);
     this.http.post(this.meta + "files", JSON.stringify(meta)).subscribe(
       (response) => {
         console.log(response);
+        this.homeComponent?.getFolders();
+        
       },
       (error) => {
         console.log(meta);
@@ -99,13 +107,15 @@ export class FileService {
   }
 
   getFolders(prefix: string): Observable<string[]> {
-    return this.http.get<string[]>(this.meta + 'bucket/' + prefix);
+    return this.http.get<string[]>(this.meta + 'folder/' + prefix);
   }
 
   createNewFolder(id : any) : Observable<any>{
-    console.log(id, "  id")
-
     return this.http.post(this.meta + 'folder', id);
+  }
+
+  deleteFolder(data : any) : Observable<any> {
+    return this.http.post('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/deleteFolder', data)
   }
 
   getPictureData(sufix : string) : Observable<any> {

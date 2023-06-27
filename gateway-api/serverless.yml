@@ -154,13 +154,13 @@ functions:
               paths:
                 id: true
 
-  getBucket:
-    handler: getBucket/get_bucket.get_one
+  getFolder:
+    handler: getFolder/get_folder.get_one
     package:
-      include: 'getBucket/**'
+      include: 'getFolder/**'
     events:
       - http:
-          path: bucket/{sufix}
+          path: folder/{sufix}
           method: get
           cors: true
           request:
@@ -177,6 +177,17 @@ functions:
           path: folder
           method: post
           cors: true
+
+  deleteFolder:
+    handler: deleteFolder/delete_folder.delete
+    package:
+      include: 'deleteFolder/**'
+    events:
+      - http:
+          path: deleteFolder
+          method: post
+          cors: true
+
 
   getFolders:
     handler: getFolders/get_folders.get_one
