@@ -1,8 +1,14 @@
 import os
 import boto3
+import json
 from utility.utils import create_response
 
 def send_sms(event, context):
+    
+    body = json.loads(event['body'])
+
+    subj = body['subject']
+    sms = body['content']    
     try:
         client = boto3.client('ses', region_name='us-east-1')
 
@@ -13,11 +19,11 @@ def send_sms(event, context):
             },
             Message={
                 'Subject': {
-                    'Data': 'Notification',
+                    'Data': subj,
                 },
                 'Body': {
                     'Text': {
-                        'Data': 'Test message',
+                        'Data': sms,
                     },
                 },
             }
