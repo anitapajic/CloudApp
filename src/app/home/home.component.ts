@@ -1,10 +1,9 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import { FileService } from '../services/file.service';
-import { CognitoService } from '../services/cognito.service';
-import { newIUser } from '../model/User';
-import { DomSanitizer, SafeResourceUrl  } from '@angular/platform-browser';
+import {Component, OnInit} from '@angular/core';
+import {FileService} from '../services/file.service';
+import {CognitoService} from '../services/cognito.service';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {metaIFile} from "../model/File";
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -29,14 +28,19 @@ export class HomeComponent implements OnInit{
   myImage! : SafeResourceUrl ;
   myVideo! : SafeResourceUrl ;
   myPDF! : SafeResourceUrl ;
+  myTXT! : SafeResourceUrl;
+  myDocs! : SafeResourceUrl;
   data! : metaIFile;
   page : string = 'main';
   isEditMode = false;
   isImage = false;
   isVideo = false;
   isPDF = false;
+  isTXT = false;
+  isDocs = false;
   dataIsFull = false;
   tempData! : any;
+  urlToDocs! : SafeResourceUrl;
 
   constructor(private router: Router, private fileService: FileService, private cognito: CognitoService, private sanitizer: DomSanitizer) { }
   ngOnInit(): void {
@@ -44,6 +48,8 @@ export class HomeComponent implements OnInit{
     this.isImage = false;
     this.isVideo = false;
     this.isPDF = false;
+    this.isTXT = false;
+    this.isDocs = false;
     this.dataIsFull = false;
 
     this.cognito.getUser().then((user)=>{
@@ -74,21 +80,6 @@ export class HomeComponent implements OnInit{
         this.folders = response.data['folders']
     });
   }
-
-  // selectedButton: string = 'dashboard';
-
-  // selectButton(button: string): void {
-  //   this.selectedButton = button;
-  // }
-  // activityStatus(){
-  //   this.isActiveDash = false
-  //   this.isActiveFolder = true
-  // }
-
-  // handleClick(item: any) {
-  //   console.log("Clicked:", item);
-  //   // Handle the click event for the clicked item here
-  // }
 
   isFile(obj: string): boolean {
     if( obj.includes('.')){
@@ -129,6 +120,8 @@ export class HomeComponent implements OnInit{
       this.isImage = false;
       this.isVideo = false;
       this.isPDF = false;
+      this.isTXT = false;
+      this.isDocs = false;
       this.dataIsFull = false;
       this.goBack()
       if (this.currentFolder == ''){
@@ -140,6 +133,8 @@ export class HomeComponent implements OnInit{
       this.isImage = false;
       this.isVideo = false;
       this.isPDF = false;
+      this.isTXT = false;
+      this.isDocs = false;
       this.dataIsFull = false;
       this.next(obj)
     }
@@ -176,6 +171,14 @@ export class HomeComponent implements OnInit{
         else if(encodedData.type.includes('pdf')){
           this.isPDF = true;
           this.myPDF = this.sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,' + encodedFile);
+        }
+        else if(encodedData.type.includes('plain')){
+          this.isTXT = true;
+          this.myTXT = atob(encodedFile);
+        }
+        else if(pictureName.includes('docx')){
+          this.isDocs = true;
+          this.urlToDocs = this.sanitizer.bypassSecurityTrustResourceUrl('https://view.officeapps.live.com/op/embed.aspx?src=https://tim19-bucket.s3.amazonaws.com/' + this.currentFolder + "%2F" + pictureName);
         }
         this.dataIsFull = true;
         this.data = encodedData;
@@ -242,6 +245,8 @@ export class HomeComponent implements OnInit{
         this.isImage = false;
         this.isVideo = false;
         this.isPDF = false;
+        this.isTXT = false;
+        this.isDocs = false;
         this.dataIsFull = false;
       },
       (error) => {
