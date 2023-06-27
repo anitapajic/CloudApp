@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IFile, metaIFile } from '../model/File';
-import { environment } from 'src/environments/environment';
 import { CognitoService } from './cognito.service';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import { JsonPipe } from '@angular/common';
+import {HttpClient} from "@angular/common/http";
 import { Observable } from 'rxjs';
 import { HomeComponent } from '../home/home.component';
 
@@ -15,8 +13,7 @@ export class FileService {
 
   homeComponent: HomeComponent | null = null;
 
-
-  constructor(private cognito: CognitoService, private http:HttpClient) { }
+  constructor(private cognito: CognitoService, private http:HttpClient) {}
 
   meta : string = 'https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/';
 
@@ -41,11 +38,7 @@ export class FileService {
       var encodedFile = reader.result as string
       encodedFile =  encodedFile.split(',')[1];
       this.uploadFileData(file, encodedFile);
-      // if(file.favourite){
-      //   file.id = file.username + '/favourites/' + file.name
-      //   this.uploadFileData(file, encodedFile);
 
-      // }
 
     }
 
@@ -93,7 +86,19 @@ export class FileService {
       (response) => {
         console.log(response);
         this.homeComponent?.getFolders();
-        
+
+        let data = {
+          "subject" : "File uploaded",
+          "content" : "You successfully uploaded file " + meta.name +".",
+        }
+        this.sendNotification(data).subscribe(
+          (response) => {
+            console.log(response);
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
       },
       (error) => {
         console.log(meta);
@@ -107,6 +112,20 @@ export class FileService {
     this.http.put(this.meta + "files", JSON.stringify(meta)).subscribe(
       (response) => {
         console.log(response);
+        let data = {
+          "subject" : "File update",
+          "content" : "You successfully updated file " + meta.name +".",
+        }
+        this.sendNotification(data).subscribe(
+          (response) => {
+            console.log(response);
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+
+
       },
       (error) => {
         console.error(error);
@@ -138,5 +157,9 @@ export class FileService {
     return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/download/' + sufix)
   }
 
+
+  sendNotification(data : any){
+    return this.http.post('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/sendSMS', data)
+  }
 
 }

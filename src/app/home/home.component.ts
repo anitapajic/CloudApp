@@ -244,7 +244,19 @@ export class HomeComponent implements OnInit{
     this.fileService.deleteFile(this.currentFolder + "%2F" + name).subscribe(
       (response) => {
         console.log(response);
-        alert("File is successfully deleted.")
+        let data = {
+          "subject" : "File deleted",
+          "content" : "You successfully deleted file " + name +".",
+        }
+        this.fileService.sendNotification(data).subscribe(
+          (response) => {
+            console.log(response);
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+
         this.getFolders();
         this.removeFile();
       },
@@ -303,6 +315,18 @@ export class HomeComponent implements OnInit{
       (response) => {
         console.log(response);
         this.getFolders();
+        let data = {
+          "subject" : "Folder deleted",
+          "content" : "You successfully deleted folder " + folder +".",
+        }
+        this.fileService.sendNotification(data).subscribe(
+          (response) => {
+            console.log(response);
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
       },
       (error) => {
         console.error('Error deleting folder:', error);
@@ -327,4 +351,6 @@ export class HomeComponent implements OnInit{
             console.log('Error downloading file:', error);
           });
   }
+
+  
 }

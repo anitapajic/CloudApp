@@ -34,6 +34,11 @@ provider:
       Resource:
         - "Fn::GetAtt": [ fileTable, Arn ]
 
+    - Effect: Allow
+      Action:
+        - ses:SendEmail
+        - ses:SendRawEmail
+      Resource: "*"
 
 # Packaging global configuration
 package:
@@ -202,6 +207,19 @@ functions:
             parameters:
               paths:
                 username: true
+
+  sendSMS:
+    handler: sendNotification/send.send_sms
+    package:
+      include: 'sendNotification/**'
+    events:
+      - http:
+          path: sendSMS
+          method: post
+          cors: true
+
+
+
 resources:
   Resources:
     userTable:
