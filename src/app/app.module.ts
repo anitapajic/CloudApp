@@ -10,6 +10,7 @@ import {AppRoutingModule} from "./app-routing.module";
 import { UploadFileComponent } from './upload-file/upload-file.component';
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { HomeComponent } from './home/home.component';
+import { NewFolderComponent } from './new-folder/new-folder.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { HomeComponent } from './home/home.component';
     ProfileComponent,
     UploadFileComponent,
     HomeComponent,
+    NewFolderComponent,
   ],
   imports: [
     BrowserModule,

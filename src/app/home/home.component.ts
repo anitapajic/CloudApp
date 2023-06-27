@@ -23,7 +23,8 @@ export class HomeComponent implements OnInit{
   folders : string[] = [];
   sharedFolders : string[] = [];
 
-
+  newFolder : string = "";
+  createNew : boolean = false;
 
   myImage! : SafeResourceUrl ;
   myVideo! : SafeResourceUrl ;
@@ -52,6 +53,8 @@ export class HomeComponent implements OnInit{
     this.isDocs = false;
     this.dataIsFull = false;
 
+    this.fileService.setHomeComponent(this)
+    
     this.cognito.getUser().then((user)=>{
       this.currentFolder = user.attributes['email'];
       this.rootFolder = this.currentFolder;
@@ -100,10 +103,8 @@ export class HomeComponent implements OnInit{
   }
 
   next(obj : string){
-    console.log('obj  ', obj)
     this.previousFolder = this.currentFolder;
     if (this.currentFolder == ""){
-      console.log(obj)
       this.currentFolder = obj.replace('/', '%2F');
 
     }else{
@@ -111,41 +112,37 @@ export class HomeComponent implements OnInit{
 
     }
   }
+  
+  checkAndChangeFolder(event : any, obj: string) {
+    const clickedElement = event.target as HTMLElement;
+    console.log(clickedElement)
+    const isLastTdClicked = clickedElement.id === 'delete';
+  
+    if (!isLastTdClicked) {
+      this.changeFolder(obj);
+    }
+  }
+  
 
   changeFolder(obj : string){
 
     this.folders = [];
-
+    this.removeFile()
     if(obj == '/'){
-      this.isImage = false;
-      this.isVideo = false;
-      this.isPDF = false;
-      this.isTXT = false;
-      this.isDocs = false;
-      this.dataIsFull = false;
       this.goBack()
       if (this.currentFolder == ''){
         return
       }
     }
-
     else{
-      this.isImage = false;
-      this.isVideo = false;
-      this.isPDF = false;
-      this.isTXT = false;
-      this.isDocs = false;
-      this.dataIsFull = false;
       this.next(obj)
     }
 
 
-    console.log(this.currentFolder,  "  current")
     this.fileService.getFolders(this.currentFolder)
     .subscribe(
       (folders: any) => {
         this.folders = folders['files'];
-        console.log(this.folders);
         // Further actions with the folders
       },
       (error: any) => {
@@ -214,6 +211,7 @@ export class HomeComponent implements OnInit{
 
   changePage(page : string){
     this.folders = []
+    this.removeFile()
     this.page = page;
     if (page == 'shared'){
       this.currentFolder = ""
@@ -226,14 +224,20 @@ export class HomeComponent implements OnInit{
       this.getFolders()
 
     }
-    console.log(this.rootFolder)
-    console.log(this.currentFolder)
-
 
   }
 
   logout(){
     this.router.navigate(['/']);
+  }
+
+  removeFile(){
+    this.isImage = false;
+    this.isVideo = false;
+    this.isPDF = false;
+    this.dataIsFull = false;
+    this.isTXT = false;
+    this.isDocs = false;
   }
 
   delete(name : string) {
@@ -242,17 +246,68 @@ export class HomeComponent implements OnInit{
         console.log(response);
         alert("File is successfully deleted.")
         this.getFolders();
-        this.isImage = false;
-        this.isVideo = false;
-        this.isPDF = false;
-        this.isTXT = false;
-        this.isDocs = false;
-        this.dataIsFull = false;
+        this.removeFile();
       },
       (error) => {
         console.error('Error deleting file:', error);
       }
     );
+  }
+
+  newFolderName(){
+    this.createNew = !this.createNew;
+  }
+  updateFolderName(event:any) {
+    this.newFolder = event.target.value;
+  }
+
+  createNewFolder(){
+    if(this.folders.includes(this.newFolder)){
+      alert("Folder already exist")
+      return
+    }
+    if(this.newFolder.length < 1){
+      alert("Enter folder name")
+      return
+    }
+    if(this.newFolder.includes('/')){
+      alert("Folder name can't include / ")
+      return
+    }
+
+    let body = {
+      'id' : this.currentFolder.replaceAll('%2F', '/') + '/' + this.newFolder
+    }
+    console.log(this.currentFolder, " after")
+
+    this.fileService.createNewFolder(body).subscribe(
+      (response) => {
+        console.log(response);
+        this.getFolders();
+        this.newFolderName()
+      },
+      (error) => {
+        console.error('Error creating folder:', error);
+      }
+    )
+
+  }
+
+
+  deleteFolder(folder : string){
+    let data = {
+      'id' : this.currentFolder.replaceAll('%2F', '/') + '/' +folder,
+    }
+
+    this.fileService.deleteFolder(data).subscribe(
+      (response) => {
+        console.log(response);
+        this.getFolders();
+      },
+      (error) => {
+        console.error('Error deleting folder:', error);
+      }
+    )
   }
 
   download(name:string) {

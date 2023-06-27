@@ -5,12 +5,16 @@ import { CognitoService } from './cognito.service';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { JsonPipe } from '@angular/common';
 import { Observable } from 'rxjs';
+import { HomeComponent } from '../home/home.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
   s3_path: string = 'https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/tim19-bucket';
+
+  homeComponent: HomeComponent | null = null;
+
 
   constructor(private cognito: CognitoService, private http:HttpClient) { }
 
@@ -23,18 +27,13 @@ export class FileService {
     await this.cognito.getUser().then((value: any) => {
       file.username = value.attributes.email;
     })
-    var typeFolder = this.findFolder(file.type.split('/')[0]);
 
-    var fileDir = file.username + '/' + typeFolder + '/' + file.name
+    var typeFolder = this.findFolder(file.username, file.type.split('/')[0]);
 
+    var fileDir =  typeFolder + '/' + file.name
+
+    console.log(fileDir, " filedir")
     file.id = fileDir
-
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      })
-    };
 
     const reader = new FileReader();
     reader.readAsDataURL(file.file);
@@ -42,54 +41,36 @@ export class FileService {
       var encodedFile = reader.result as string
       encodedFile =  encodedFile.split(',')[1];
       this.uploadFileData(file, encodedFile);
-      if(file.favourite){
-        file.id = file.username + '/favourites/' + file.name
-        this.uploadFileData(file, encodedFile);
+      // if(file.favourite){
+      //   file.id = file.username + '/favourites/' + file.name
+      //   this.uploadFileData(file, encodedFile);
 
-      }
-
+      // }
 
     }
 
-
-    // this.http.put(this.s3_path + fileDir, file.file).subscribe(
-    //   (response) => {
-    //     console.log(response);
-    //   },
-    //   (error) => {
-    //     console.error(error);
-    //   }
-    // );
-
-
-    // }
-
-
-
-
-    // const formData = new FormData();
-    // formData.append('file', file.file)
-    // formData.append('id', file.id)
-
-
-
-
-    //kad sve zavrsi upisi metadata
-    // this.uploadFileData(file);
-
   }
 
-  findFolder(type: string) {
+  findFolder(username: string, type: string) {
+    let currentFolder = this.homeComponent?.currentFolder;
+    let rootFolder = this.homeComponent?.rootFolder;
+
+    if(currentFolder != rootFolder){
+      return currentFolder?.replaceAll("%2F", '/');
+    }
     if(type=='image')
-      return 'photos';
+      return username + '/' + 'photos';
     else if(type == 'video')
-      return 'videos'
+      return username + '/' + 'videos'
     else if(type == 'application')
-      return 'documents'
+      return username + '/' + 'documents'
     else
-      return 'other'
+      return username + '/' + 'other'
   }
 
+  setHomeComponent(home : HomeComponent){
+    this.homeComponent = home;
+  }
 
 
   uploadFileData(file: IFile, encodedFile : string){
@@ -108,10 +89,11 @@ export class FileService {
       file : encodedFile
     }
 
-    console.log(meta);
     this.http.post(this.meta + "files", JSON.stringify(meta)).subscribe(
       (response) => {
         console.log(response);
+        this.homeComponent?.getFolders();
+        
       },
       (error) => {
         console.log(meta);
@@ -136,32 +118,13 @@ export class FileService {
     return this.http.get<string[]>(this.meta + 'folder/' + prefix);
   }
 
-
-  test(){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      })
-    };
-
-    return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/tim19-bucket/anitaapajic@gmail.com/photos/Desktop-1.jpg', { responseType: 'blob' })
+  createNewFolder(id : any) : Observable<any>{
+    return this.http.post(this.meta + 'folder', id);
   }
 
-  getFiles(){
-
-    // %2F je znak za / koji treba da ostane
-    this.http.get(this.meta + 'files' + '\'%2Ftamara@gmail.com%2Fphotos%2FDesktop-4.jpg\'').subscribe(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+  deleteFolder(data : any) : Observable<any> {
+    return this.http.post('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/deleteFolder', data)
   }
-
-
-
 
   getPictureData(sufix : string) : Observable<any> {
     return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/files/' + sufix)

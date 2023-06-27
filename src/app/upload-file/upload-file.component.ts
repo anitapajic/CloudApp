@@ -3,6 +3,7 @@ import * as events from "events";
 import { FileService } from '../services/file.service';
 import { IFile } from '../model/File';
 import { FormControl, FormGroup } from '@angular/forms';
+import { CognitoService } from '../services/cognito.service';
 
 @Component({
   selector: 'app-upload-file',
@@ -10,14 +11,14 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./upload-file.component.css']
 })
 export class UploadFileComponent implements OnInit{
-
+  allFolders! : string[];
 
   file:File| null = null;
   fileForm!: FormGroup;
 
   myFile: IFile = {} as IFile;
 
-  constructor(private fileService: FileService) { }
+  constructor(private fileService: FileService, private cognito : CognitoService) { }
 
   ngOnInit() {
     console.log('Upload initialised');
