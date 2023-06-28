@@ -115,6 +115,15 @@ body {
     height: 2rem;
   }
 
+  .share-input{
+    border-radius: .2rem;
+    font-size: 14px;
+    width:180px;
+    text-decoration: none;
+    margin: 10px;
+    height: 2rem;
+  }
+
   .folder-div{
     padding-left: 40px;
     background-color: white; 
@@ -130,7 +139,16 @@ body {
     width: 220px;
     height: 126px;
   }
-
+  .share-div{
+    width: 200px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    position: absolute; 
+    right: 150;
+    z-index: 9999;
+  }
 
   .card {
     height: 85px;
@@ -268,6 +286,28 @@ body {
   padding: 0 1rem;
   height: 36px;
   margin-right: 10px;
+  margin-top: 20px;
+  line-height: 36px;
+  color: #fff;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+  background: #0f555b;
+  border-color: #0f555b;
+  cursor: pointer;
+}
+
+.btn-share{
+  clear: both;
+  font-family: inherit;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: initial;
+  border: none;
+  border-radius: .2rem;
+  outline: none;
+  padding: 0 1rem;
+  height: 36px;
+  margin-left: 20px;
   margin-top: 20px;
   line-height: 36px;
   color: #fff;

@@ -78,15 +78,14 @@
                             <th>Name</th>
                             <th>Type</th>
                             <th>Delete</th>
+                            <th>Share</th>
                           </tr>
                         </thead>
                         <tr (click)="changeFolder('/')" *ngIf="rootFolder != currentFolder">
                           <td><i class="fas fa-folder" ></i>/</td>
                           <td>Folder</td>
-                          <td>
-                            <i style="margin-left: 15px;">-</i>
-
-                          </td>
+                          <td></td>
+                          <td></td>
                         </tr>
                         <tbody *ngFor="let obj of folders">
                         <tr (click)="isFile(obj) ? openPicture(obj) : checkAndChangeFolder($event, obj)" *ngIf="obj.length > 1">
@@ -95,11 +94,22 @@
                           </td>
                           <td>{{ isFile(obj) ? 'File' : 'Folder' }}</td>
 
-                          <td (click)="deleteFolder(obj)" style="z-index: 9999;" >
-                            <i *ngIf="!isFile(obj)" style="margin-left: 15px" [class]="'fas fa-trash'" id="delete"></i>
-                            <i *ngIf="isFile(obj)" style="margin-left: 15px;">-</i>
-
+                          <td (click)="!isFile(obj) ? deleteFolder(obj) : delete(obj)" style="z-index: 9999;" >
+                            <i style="margin-left: 15px" [class]="'fas fa-trash'" id="delete"></i>
                           </td>
+                          <td style="z-index: 9999;" >
+
+                          <div style="position: relative;" (click)="setIsSharing($event, obj)">
+                                <i style="margin-left: 15px" [class]="'fas fa-share-alt'" id="share"></i>
+                                <div class="share-div" *ngIf="isSharing == obj">
+                                  <form id="share2">
+                                    <input class="share-input" type="text" placeholder="Enter username" id="share2" (input)="updateShare($event)" required>
+                                    <button class="btn-share" id="shareObj">Share</button>
+                                    <button class="btn-share" (click)="isSharing = '0' " id="shareCancel"> Cancel</button>
+                                  </form>
+                                </div>
+                              </div>                          
+                            </td>
                         </tr>
                         </tbody>
                       </table>

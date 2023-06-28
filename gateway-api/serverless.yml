@@ -245,6 +245,16 @@ functions:
               paths:
                 id: true              
 
+  share:
+    handler: share/share.share
+    package:
+      include: 'share/**'
+    events:
+      - http:
+          path: share
+          method: post
+          cors: true
+
   sendSMS:
     handler: sendNotification/send.send_sms
     package:

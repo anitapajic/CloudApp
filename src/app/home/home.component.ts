@@ -29,6 +29,9 @@ export class HomeComponent implements OnInit{
   newInvitation : string = "";
   creteNewInvitation : boolean = false;
 
+  isSharing : string = "";
+  shareUsername : string = ""
+
   myImage! : SafeResourceUrl ;
   myVideo! : SafeResourceUrl ;
   myPDF! : SafeResourceUrl ;
@@ -48,6 +51,7 @@ export class HomeComponent implements OnInit{
 
   constructor(private router: Router, private fileService: FileService, private cognito: CognitoService, private sanitizer: DomSanitizer) { }
   ngOnInit(): void {
+    console.log("cccc")
 
     this.isImage = false;
     this.isVideo = false;
@@ -90,7 +94,7 @@ export class HomeComponent implements OnInit{
   isFile(obj: string): boolean {
     if( obj.includes('.')){
       let extension = obj.split('.')[1]
-      return extension != 'com'
+      return !extension.includes('com')
     }
     return false;
   }
@@ -118,14 +122,22 @@ export class HomeComponent implements OnInit{
 
   checkAndChangeFolder(event : any, obj: string) {
     const clickedElement = event.target as HTMLElement;
-    console.log(clickedElement)
-    const isLastTdClicked = clickedElement.id === 'delete';
 
+    const isLastTdClicked = (clickedElement.id === 'delete' ||  clickedElement.id === 'share' ||  clickedElement.id === 'share2' ||  clickedElement.id === 'shareObj' ||  clickedElement.id === 'shareCancel' );
     if (!isLastTdClicked) {
       this.changeFolder(obj);
     }
   }
 
+  setIsSharing(event: any, obj : string){
+    const clickedElement = event.target as HTMLElement;
+    if (clickedElement.id === 'share') {
+      this.isSharing = obj;
+    }
+    else if(clickedElement.id === 'shareObj'){
+      this.share(obj)
+    }
+  }
 
   changeFolder(obj : string){
 
@@ -306,6 +318,30 @@ export class HomeComponent implements OnInit{
       },
       (error) => {
         console.error('Error creating folder:', error);
+      }
+    )
+
+  }
+
+  updateShare(event: any){
+    this.shareUsername = event.target.value;
+  }
+
+  share(obj : string){
+
+    console.log(obj)
+    // TODO: daj korisniku izbor da unesi username kome deli file/folder
+    let data = {
+      'path' : this.currentFolder.replaceAll('%2F', '/') + '/' +obj,
+      'username' : this.shareUsername
+    }
+    this.fileService.share(data).subscribe(
+      (response) => {
+        console.log(response);
+        this.isSharing = ''
+      },
+      (error) => {
+        console.error(error);
       }
     )
 
