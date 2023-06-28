@@ -157,8 +157,12 @@ export class FileService {
     return this.http.get('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/download/' + sufix)
   }
 
+  share(data : any) : Observable<any>{
+    return this.http.post('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/share/', data)
+  }
 
-  sendNotification(data : any){
+
+  sendNotification(data : any): Observable<any>{
     return this.http.post('https://c3bmmftrka.execute-api.us-east-1.amazonaws.com/dev/sendSMS', data)
   }
 
